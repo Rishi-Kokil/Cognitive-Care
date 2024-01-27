@@ -1,4 +1,3 @@
 import db from "./connection.js";
 
-
-export { db };
+export { db , User , UserPatient , UserProfile};

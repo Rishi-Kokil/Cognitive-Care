@@ -1,0 +1,27 @@
+src/
+|-- components/
+|   |-- common/              // Reusable components used across the application
+|   |-- dashboard/           // Components specific to dashboards
+|   |-- homepage/            // Components specific to the homepage
+|   |-- community/           // Components specific to community features
+|   |-- auth/                // Components related to authentication (login, signup, etc.)
+|
+|-- pages/
+|   |-- AdminDashboard/      // Pages for the admin dashboard
+|   |-- UserDashboard/       // Pages for the user dashboard
+|   |-- DoctorDashboard/     // Pages for the doctor dashboard
+|   |-- Community/           // Pages related to community features
+|   |-- Homepage/            // Pages for the homepage
+|   |-- NotFound.js          // 404 page
+|
+|-- assets/                  // Images, icons, and other static assets
+|
+|-- utils/                   // Utility functions, helper methods, etc.
+|
+|-- context/                 // Context providers for managing global state
+|
+|-- services/                // API service functions for handling backend interactions
+|
+|-- App.jsx                   // Main component for routing and layout
+|-- main.jsx                 // Entry point of the application
+|-- theme.css                // Global styles and theming
