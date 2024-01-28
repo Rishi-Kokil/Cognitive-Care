@@ -11,17 +11,20 @@ const useAuth = () => {
 const AuthComponent = ({ children }) => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [token, setToken] = useState(null);
 
     const login = () => {
         // Perform login actions (e.g., authenticate user with backend, get token)
         const token = 'your_jwt_token_here'; // Sample token, replace with actual token
         localStorage.setItem('jwtToken', token);
+        setToken(token);
         setIsAuthenticated(true);
     };
 
     const logout = () => {
         // Perform logout actions (e.g., clear token, reset state)
         localStorage.removeItem('jwtToken');
+        setToken(null);
         setIsAuthenticated(false);
     };
 
@@ -31,13 +34,12 @@ const AuthComponent = ({ children }) => {
         if (token) {
             // Validate the token (You need to implement this)
             const isValidToken = false; //perform validation here
-
             setIsAuthenticated(isValidToken);
         }
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated , token, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

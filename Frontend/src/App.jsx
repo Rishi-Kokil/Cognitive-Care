@@ -1,18 +1,24 @@
 import { useState } from 'react'
-import './App.css'
-
 import * as React from "react";
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
-import { useEffect } from 'react';
-import apiClient from './services/api';
-import Home from './Home';
+
 import ContextWrapper from './context/ContextWrapper';
+import {Home , Login , Signup} from './pages';
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
   },
+  {
+    path : "/signup",
+    element : <Signup />
+  },
+  {
+    path : "/login",
+    element : <Login />
+  }
 ]);
 
 
@@ -26,4 +32,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
