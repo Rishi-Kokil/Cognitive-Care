@@ -1,6 +1,6 @@
-import Doctor from "./doctor";
-import DoctorPatient from "./doctorPatient";
-import DoctorProfile from "./doctorProfile";
+import Doctor from "./doctor.js";
+import DoctorPatient from "./doctorPatient.js";
+import DoctorProfile from "./doctorProfile.js";
 
 
 export { Doctor , DoctorPatient, DoctorProfile};

@@ -1,15 +1,19 @@
-import React from 'react'
+import React from 'react';
+import NavbarComponent from '../components/NavbarComponent';
 
-import NavbarComponent from '../components/NavbarComponent'
-
+import { HeroImg, HeroImg2 } from '../services/imageImports';
+import Hero from '../components/Hero';
 
 function Home() {
+
   return (
     <>
-      <NavbarComponent />
-      Home
+      <div id='home'>
+        <NavbarComponent />
+        <Hero />
+      </div>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

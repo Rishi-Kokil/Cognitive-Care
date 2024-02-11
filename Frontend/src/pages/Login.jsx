@@ -8,7 +8,6 @@ import {
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 
-
 function Login() {
 
     const navigate = useNavigate();
@@ -55,7 +54,7 @@ function Login() {
                     </Button>
                     <Typography color="gray" className="mt-4 text-center font-normal">
                         Create an account ?{" "}
-                        <span className="font-normal cursor-pointer font-bold text-black"
+                        <span className="font-normal cursor-pointer text-black"
                             onClick={() => {
                                 navigate('/signup')
                             }}>Sign Up</span>

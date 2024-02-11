@@ -2,13 +2,9 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const adminProfileSchema = new Schema({
-    username: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    password: {
-        type: String,
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Admin', // Referencing the User model
         required: true
     },
     fullName: {

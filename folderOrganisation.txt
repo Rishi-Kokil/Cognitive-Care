@@ -14,6 +14,9 @@ src/
 |   |-- Homepage/            // Pages for the homepage
 |   |-- NotFound.js          // 404 page
 |
+|-- layouts/
+    |--UserDashboardLayout
+    |--DocotorDashboardLayout
 |-- assets/                  // Images, icons, and other static assets
 |
 |-- utils/                   // Utility functions, helper methods, etc.

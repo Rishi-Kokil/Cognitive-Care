@@ -4,15 +4,18 @@ import { db } from './Database/index.js';
 import adminRouter from './Routers/AdminRouter/index.js';
 import userRouter from './Routers/UserRouter/index.js';
 import doctorRouter from './Routers/DoctorRouter/index.js';
+import { signUpRouteController } from './Services/login_signup_controllers.js';
+import cors from 'cors';
 
 const app = express();
-
+app.use(express.json());
+app.use(cors());
 app.use("/admin" , adminRouter);
 app.use("/user" , userRouter);
 app.use("/doctor" , doctorRouter);
 
 app.post("/login" , ()=>{});
-app.post("/register" , ()=>{});
+app.post("/signup" , signUpRouteController);
 
 
 app.listen(8080 , ()=>{

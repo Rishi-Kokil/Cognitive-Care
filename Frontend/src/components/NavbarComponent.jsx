@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 
 import {
   Navbar,
@@ -13,6 +14,14 @@ import navlinks from '../constants';
 
 function NavbarComponent() {
   const [openNav, setOpenNav] = React.useState(false);
+  const navigate = useNavigate();
+
+  const handleLoginClick = ()=>{
+    navigate("/login");
+  }
+  const handleSignUpClick = ()=>{
+    navigate("/signup");
+  }
 
   useEffect(() => {
     window.addEventListener(
@@ -23,13 +32,13 @@ function NavbarComponent() {
 
   return (
     <div className="max-h-[768px] w-full">
-      <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4">
+      <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4 border-none">
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
             as="span"
-            className="mr-4 cursor-pointer py-1.5 font-medium"
+            className="mr-4 cursor-pointer py-1.5 font-bold"
           >
-            Material Tailwind
+            CognitiveCare
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{
@@ -39,9 +48,9 @@ function NavbarComponent() {
                     <Typography
                       key={item.id}
                       as="li"
-                      variant="small"
+                      variant="paragraph"
                       color="blue-gray"
-                      className="p-1 font-medium "
+                      className="p-1 font-bold cursor-default hover:text-blue-300"
                       id={item.id}
                     >
                       <span>{item.title}</span>
@@ -55,17 +64,20 @@ function NavbarComponent() {
             <div className="flex items-center gap-x-1">
               <Button
                 variant="text"
-                size="sm"
+                size="md"
                 className="hidden lg:inline-block"
+                onClick={handleLoginClick}
               >
                 <span>Log In</span>
               </Button>
+              
               <Button
                 variant="gradient"
-                size="sm"
+                size="md"
                 className="hidden lg:inline-block"
+                onClick={handleSignUpClick}
               >
-                <span>Sign in</span>
+                <span>SIGN UP</span>
               </Button>
             </div>
             <IconButton
@@ -124,10 +136,10 @@ function NavbarComponent() {
             ))
           }
           <div className="flex items-center gap-x-1">
-            <Button fullWidth variant="text" size="sm" className="">
+            <Button fullWidth variant="text" size="sm" className="" onClick={handleLoginClick}>
               <span>Log In</span>
             </Button>
-            <Button fullWidth variant="gradient" size="sm" className="">
+            <Button fullWidth variant="gradient" size="sm" className="" onClick={handleSignUpClick}>
               <span>Sign in</span>
             </Button>
           </div>

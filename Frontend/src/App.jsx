@@ -3,8 +3,8 @@ import * as React from "react";
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 
 import ContextWrapper from './context/ContextWrapper';
-import {Home , Login , Signup} from './pages';
-
+import { Home, Login, Signup, UserDashBoard } from './pages';
+import {UserHome, UserProfile, UserChat, UserSettings, CreateUserPatient, ManageUserPatient} from './components/User'
 
 const router = createBrowserRouter([
   {
@@ -12,12 +12,42 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path : "/signup",
-    element : <Signup />
+    path: "/signup",
+    element: <Signup />
   },
   {
-    path : "/login",
-    element : <Login />
+    path: "/login",
+    element: <Login />
+  },
+  {
+    path: "/user",
+    element: <UserDashBoard />,
+    children: [
+      {
+        path: "home",    // Home route under user
+        element: <UserHome />
+      },
+      {
+        path: "create-patient",    // Home route under user
+        element: <CreateUserPatient />
+      },
+      {
+        path: "manage-patient",    // Home route under user
+        element: <ManageUserPatient />
+      },
+      {
+        path: "profile", // Profile route under user
+        element: <UserProfile />
+      },
+      {
+        path: "settings", // Settings route under user
+        element: <UserSettings />
+      },
+      {
+        path: "chat",     // Chat route under user
+        element: <UserChat />
+      }
+    ]
   }
 ]);
 

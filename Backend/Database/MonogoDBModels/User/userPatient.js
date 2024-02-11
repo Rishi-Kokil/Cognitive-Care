@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-
 const DetectionResultSchema = new Schema({
     parameter_1 : String,
     accuracy : String,
@@ -43,7 +42,8 @@ const UserPatientRecordSchema = new Schema({
         type: String
     }],
     mriScans: [{
-        type: String
+        type : Buffer,
+        contentType: String
     }],
     geneticBiomarkers: [geneticBiomarkerSchema], // Nesting genetic biomarkers schema
     detectionResults: [DetectionResultSchema], 
