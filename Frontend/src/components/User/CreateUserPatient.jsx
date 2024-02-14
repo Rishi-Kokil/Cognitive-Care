@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
-import { Typography, Select, MenuItem, Input, Card, Button } from '@material-tailwind/react';
+import { Typography, Select, Input, Card, Button, Option } from '@material-tailwind/react';
+import axios from 'axios';
+import { useAuth } from '../../context/authContext';
+
 
 function CreateUserPatient() {
   const [name, setName] = useState('');
@@ -8,6 +11,17 @@ function CreateUserPatient() {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+
+  const { isAuthenticated, token, login, logout } = useAuth();
+
+  const resetFields = () => {
+    setName('');
+    setAge('');
+    setGender('');
+    setHeight('');
+    setWeight('');
+    setSelectedFile('');
+  }
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -34,10 +48,41 @@ function CreateUserPatient() {
     setWeight(event.target.value);
   };
 
+  const handleFormSubmit = async () => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('age', age);
+    formData.append('gender', gender);
+    formData.append('height', height);
+    formData.append('weight', weight);
+    formData.append('image', selectedFile);
+
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+      }
+    };
+
+    console.log(token);
+
+    try {
+      const response = await axios.post("http://localhost:8080/user/create-patients", formData, axiosConfig);
+      console.log(response);
+      if (response.data.success === true) {
+        resetFields();
+      }
+      
+    }
+    catch (error) {
+      console.log(error);
+    }
+
+  }
 
   return (
     <>
-      <Card className="h-[calc(100vh-2rem)] w-full p-4 shadow-xl shadow-blue-gray-900/5 overflow-y-auto">
+      <Card className="h-[calc(100vh-2rem)] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto">
         <Typography variant="h4" className="text-center" color="blue-gray">
           Create Patient
         </Typography>
@@ -62,14 +107,14 @@ function CreateUserPatient() {
               />
               <Select
                 label='Gender'
-                value= {gender}
+                value={gender}
                 size="large"
                 onChange={handleGenderChange}
-              > 
-                <MenuItem value={null} defaultChecked> --Select-- </MenuItem>
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-                <MenuItem value="other">Other</MenuItem>
+              >
+                <Option value={null} defaultChecked> --Select-- </Option>
+                <Option value="male">Male</Option>
+                <Option value="female">Female</Option>
+                <Option value="other">Other</Option>
               </Select>
             </div>
 
@@ -109,7 +154,11 @@ function CreateUserPatient() {
                   />
                 </div>
               </label>
-
+              <Button className="mt-6"
+                onClick={handleFormSubmit}
+              >
+                Submit
+              </Button>
 
             </div>
           </div>

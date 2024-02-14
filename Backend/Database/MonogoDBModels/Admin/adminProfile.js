@@ -11,16 +11,7 @@ const adminProfileSchema = new Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    role: {
-        type: String,
-        enum: ['superadmin', 'admin', 'moderator'], // Adjust roles based on your application needs
-        default: 'admin' // Default role for admins
-    },
+    
     contactNumber: {
         type: String
     },

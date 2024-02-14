@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useAuth } from "../context/authContext";
 
 // const backendURL = "http://localhost:8080"
 
@@ -21,6 +22,7 @@ const Signup = () => {
     const [errorState, setErrorState] = useState(null);
 
     const navigate = useNavigate();
+    const {isAuthenticated , token, login, logout} = useAuth();
 
     const handleFormSubmit = async (e) => {
         if (name !== "" && username !== "" && password !== "" && role) {
@@ -35,7 +37,8 @@ const Signup = () => {
                 });
 
                 const dashboardRoute = response.data.route;
-                console.log(response);
+                const token = response.data.token;
+                login(token);
                 navigate(dashboardRoute);
 
             } catch (error) {

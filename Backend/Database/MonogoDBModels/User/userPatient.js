@@ -12,24 +12,19 @@ const DetectionResultSchema = new Schema({
 });
 
 // Define schema for genetic biomarkers
-const geneticBiomarkerSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    value: {
-        type: String,
-        required: true
-    }
-});
+// const geneticBiomarkerSchema = new Schema({
+//     blood_sugar : String,
+//     blood_pressure : String,
+// });
 
 // Define schema for the patient
 const UserPatientRecordSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User who created the patient record
+        ref: 'UserProfile', // Reference to the User who created the patient record
         required: true
     },
+    created_at: { type: Date, default: Date.now },
     fullName: {
         type: String,
         required: true
@@ -38,15 +33,27 @@ const UserPatientRecordSchema = new Schema({
         type: Number,
         required: true
     },
+    height : {
+        type : String
+    },
+    weight : {
+        type : String
+    },
+    gender : {
+        type : String
+    },
+
     medicalRecords: [{
         type: String
     }],
-    mriScans: [{
-        type : Buffer,
+    
+    mri_image : {
+        data : Buffer,
         contentType: String
-    }],
-    geneticBiomarkers: [geneticBiomarkerSchema], // Nesting genetic biomarkers schema
-    detectionResults: [DetectionResultSchema], 
+    },
+    // geneticBiomarkers: geneticBiomarkerSchema, // Nesting genetic biomarkers schema
+    detectionResults: [DetectionResultSchema], // array of detection results
+
 });
 
 const UserPatient = mongoose.model("UserPatient", UserPatientRecordSchema);

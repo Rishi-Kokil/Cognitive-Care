@@ -13,9 +13,9 @@ const AuthComponent = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
 
-    const login = () => {
+    const login = (recievedToken) => {
         // Perform login actions (e.g., authenticate user with backend, get token)
-        const token = 'your_jwt_token_here'; // Sample token, replace with actual token
+        const token = recievedToken; // Sample token, replace with actual token
         localStorage.setItem('jwtToken', token);
         setToken(token);
         setIsAuthenticated(true);
@@ -32,9 +32,8 @@ const AuthComponent = ({ children }) => {
         // Check for JWT token in local storage
         const token = localStorage.getItem('jwtToken');
         if (token) {
-            // Validate the token (You need to implement this)
-            const isValidToken = false; //perform validation here
-            setIsAuthenticated(isValidToken);
+            setToken(token);
+            setIsAuthenticated(true);
         }
     }, []);
 

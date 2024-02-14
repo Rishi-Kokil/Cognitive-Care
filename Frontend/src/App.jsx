@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 
 import ContextWrapper from './context/ContextWrapper';
 import { Home, Login, Signup, UserDashBoard } from './pages';
-import {UserHome, UserProfile, UserChat, UserSettings, CreateUserPatient, ManageUserPatient} from './components/User'
+import {UserHome, UserProfile, UserChat, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo} from './components/User'
 
 const router = createBrowserRouter([
   {
@@ -34,6 +34,11 @@ const router = createBrowserRouter([
       {
         path: "manage-patient",    // Home route under user
         element: <ManageUserPatient />
+      },
+      {
+        path : "patient-info/:id",
+        element : <PatientInfo />
+
       },
       {
         path: "profile", // Profile route under user

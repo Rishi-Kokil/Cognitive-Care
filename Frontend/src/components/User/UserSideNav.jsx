@@ -100,7 +100,12 @@ function UserSideNav() {
             <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
           </ListItemSuffix>
         </ListItem>
+
         <hr class="my-4 border-t border-gray-400" />
+
+
+
+        
         <ListItem selected={selected === 4} onClick={() => {
           setSelected(4)
           navigate('profile')

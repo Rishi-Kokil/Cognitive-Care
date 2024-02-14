@@ -17,7 +17,7 @@ const authenticateUser = async (req, res, next) => {
     const header = req.headers.authorization;
     if (header) {
         try {
-            const token = header.split[0];
+            const token = header.split(" ")[1];
             const data = await authenticateJWT(token, SECRECT_USER_KEY);
             req.user = data;
             next();

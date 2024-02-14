@@ -12,11 +12,6 @@ const doctorProfileSchema = new Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
     patients: [{
         type: Schema.Types.ObjectId,
         ref: 'DoctorPatient'

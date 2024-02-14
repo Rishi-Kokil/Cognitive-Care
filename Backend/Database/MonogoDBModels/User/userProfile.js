@@ -6,16 +6,11 @@ const userProfileSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User', // Referencing the User model
-        required: true
     },
+    created_at: { type: Date, default: Date.now },
     fullName: {
         type: String,
         required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
     },
     patients: [{
         type: Schema.Types.ObjectId,
@@ -24,7 +19,8 @@ const userProfileSchema = new Schema({
     joinedCommunity: [{
         type: Schema.Types.ObjectId,
         ref: 'CommunityGroup' // Reference to the community groups the user has joined
-    }],
+    }], 
+    
 });
 
 const UserProfile = mongoose.model("UserProfile", userProfileSchema);
