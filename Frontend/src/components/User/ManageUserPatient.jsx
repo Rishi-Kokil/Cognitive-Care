@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/authContext';
 
+
 function ManageUserPatient() {
 
   const [patientList, setPatientList] = useState(null);
@@ -12,22 +13,12 @@ function ManageUserPatient() {
   const navigate = useNavigate();
   const date = new Date();
 
-  // const patientList = [{
-  //   _id: 'anu34dfsnuerb248d',
-  //   fullName: 'First Patieent',
-  //   age: '67',
-  //   gender: 'male',
-  //   created_at: date.toISOString(),
-  //   mri_image: 'image',
-  // },];
-
   const handleItemClick = (id) => {
     console.log(id);
-    navigate(`/patient-info/${id}`);
+    navigate(`/user/patient-info/${id}`);
   }
 
-  const { isAuthenticated, token, login, logout } = useAuth();
-  
+  const { token } = useAuth();
 
   useEffect(() => {
     const getPatientList = async () => {
@@ -43,12 +34,12 @@ function ManageUserPatient() {
         const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
         setPatientList(response.data.patients);
         console.log(response.data.patients);
+        console.log(response.data);
       }
       catch (error) {
         console.log(error)
       }
     }
-
     getPatientList();
   }, [])
 
@@ -69,17 +60,14 @@ function ManageUserPatient() {
         </div>
         <hr class="my-4 border-t border-gray-400" />
 
-        { patientList &&
+        {patientList &&
           patientList.map((item) => (
             <PatientListComponent {...item} handleItemClick={handleItemClick} />
           ))
         }
-
       </Card>
-
-
     </>
   )
 }
 
-export default ManageUserPatient
+export default ManageUserPatient;

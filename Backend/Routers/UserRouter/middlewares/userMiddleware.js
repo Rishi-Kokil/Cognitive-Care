@@ -1,4 +1,4 @@
-import { log } from "console";
+import { error, log } from "console";
 import { UserPatient, User, UserProfile } from "../../../Database/MonogoDBModels/User/index.js";
 import fs from 'fs';
 
@@ -27,22 +27,25 @@ const createUserPatientController = async (req, res) => {
         const profile_id = user_profile._id;
 
         const newpatient = new UserPatient({ user: profile_id, fullName: name, age, height, gender });
-        await newpatient.save();
-
         //updating profile
         user_profile.patients.push(newpatient._id);
         await user_profile.save();
 
-
         if (image) {
-            newpatient.mri_image.data = fs.readFileSync(image.path);
-            newpatient.mri_image.contentType = image.type;
+            const imageBuffer = fs.readFileSync(image.path);
+            const base64Image = imageBuffer.toString('base64');
+            const imageContentType = image.type;
+            newpatient.mri_image = {
+                data: base64Image,
+                contentType: imageContentType
+            };
+
         }
 
-
+        await newpatient.save();
         res.status(201).json({
             success: true,
-            message: "Product Created Successfully",
+            message: "Patient Created Successfully",
             newpatient
         });
 
@@ -58,8 +61,7 @@ const createUserPatientController = async (req, res) => {
 
 }
 
-const managePatientsController = async (req , res) => {
-    console.log(req);
+const managePatientsController = async (req, res) => {
     const { username, password, userId, role } = req.user;
     try {
         const profile = await UserProfile.findOne({ userId });
@@ -82,11 +84,32 @@ const managePatientsController = async (req , res) => {
             error: error.message,
         });
     }
+}
+
+const getPatientInfoController = async (req, res) => {
+    const patient_id = req.query.patient_id;
+    console.log(patient_id);
+    try {
+        const patient = await UserPatient.findById(patient_id);
+        res.send({
+            success: "True",
+            message: "Patient Found",
+            error: error.message,
+            patient
+        });
+    }
+    catch (error) {
+        res.status(500).send({
+            success: "false",
+            message: "Cannot Find Patient",
+            error: error.message
+        })
+    }
 
 }
 
 
-export { createUserPatientController, managePatientsController};
+export { createUserPatientController, managePatientsController, getPatientInfoController };
 
 
 

@@ -18,7 +18,6 @@ import { Admin, AdminProfile } from "../Database/MonogoDBModels/Admin/index.js";
 
 //importing hash and jwt service
 import { hashPassword, comparePassword, generateToken } from './services.js';
-import { log } from 'console';
 
 
 const signUpRouteController = async (req, res) => {
@@ -134,7 +133,7 @@ const loginRouteController = async (req, res) => {
 
         // Respond with token and route
         const route = `/${role}`;
-        return res.status(200).json({ message: 'Login successful', token, route });
+        return res.status(200).json({ message: 'Login successfull', token, route });
     } catch (error) {
         console.error('Error logging in:', error);
         return res.status(500).json({ message: 'Internal server error' });

@@ -63,14 +63,12 @@ function UserSideNav() {
           >
             <ListItem
               onClick={() => {
-                // Handle create patient action
                 navigate("create-patient");
               }}
             >
               <ListItemPrefix>
                 <PlusCircleIcon className="h-5 w-5" />
               </ListItemPrefix>
-
               Create Patient
             </ListItem>
             <ListItem
@@ -101,11 +99,10 @@ function UserSideNav() {
           </ListItemSuffix>
         </ListItem>
 
+
         <hr class="my-4 border-t border-gray-400" />
 
 
-
-        
         <ListItem selected={selected === 4} onClick={() => {
           setSelected(4)
           navigate('profile')

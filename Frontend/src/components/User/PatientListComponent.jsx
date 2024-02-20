@@ -15,9 +15,7 @@ function PatientListComponent({ fullName, _id, age, gender, created_at, handleIt
                 <p className="text-gray-700"><strong>Age:</strong> {age}</p>
                 <p className="text-gray-700"><strong>Gender:</strong> {gender}</p>
             </div>
-
             <p className="text-gray-700 text-right text-[0.8rem]"><strong>Created At:</strong> {created_at}</p>
-
         </div>
 
     )
