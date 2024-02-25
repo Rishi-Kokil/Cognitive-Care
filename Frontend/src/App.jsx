@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 
 import ContextWrapper from './context/ContextWrapper';
 import { Home, Login, Signup, UserDashBoard } from './pages';
-import {UserHome, UserProfile, UserChat, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo} from './components/User'
+import {UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo} from './components/User'
 
 const router = createBrowserRouter([
   {
@@ -49,8 +49,8 @@ const router = createBrowserRouter([
         element: <UserSettings />
       },
       {
-        path: "chat",     // Chat route under user
-        element: <UserChat />
+        path: "forum",     // Chat route under user
+        element: <UserForum />
       } 
     ]
   }

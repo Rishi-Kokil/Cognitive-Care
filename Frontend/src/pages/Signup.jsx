@@ -38,7 +38,7 @@ const Signup = () => {
 
                 const dashboardRoute = response.data.route;
                 const token = response.data.token;
-                login(token);
+                login(token , role);
                 navigate(dashboardRoute);
 
             } catch (error) {

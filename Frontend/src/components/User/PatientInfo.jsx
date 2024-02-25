@@ -44,7 +44,6 @@ function PatientInfo() {
 
           />
         }
-
         {patient && console.log(`data:${patient.mri_image.contentType};base64,${patient.mri_image.data}`)}
 
       </Card>

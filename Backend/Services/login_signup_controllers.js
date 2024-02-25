@@ -17,7 +17,52 @@ import { Doctor, DoctorProfile } from "../Database/MonogoDBModels/Doctor/index.j
 import { Admin, AdminProfile } from "../Database/MonogoDBModels/Admin/index.js";
 
 //importing hash and jwt service
-import { hashPassword, comparePassword, generateToken } from './services.js';
+import { hashPassword, comparePassword, generateToken, authenticateJWT } from './services.js';
+
+const authenticateController = async (req, res) => {
+    const { role, token } = req.body;
+    let decoded;
+
+    try {
+        let secretKey;
+        switch (role) {
+            case "user":
+                secretKey = SECRECT_USER_KEY;
+                break;
+            case "admin":
+                secretKey = SECRECT_ADMIN_KEY;
+                break;
+            case "doctor":
+                secretKey = SECRECT_DOCTOR_KEY;
+                break;
+            default:
+                return res.status(400).send({
+                    success: false,
+                    message: "Invalid role specified"
+                });
+        }
+
+        decoded = await authenticateJWT(token, secretKey);
+
+        if (decoded) {
+            return res.send({
+                success: true,
+                message: "Authenticated Successfully"
+            });
+        }
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error.message
+        });
+    }
+
+    // If decoded is not truthy, authentication failed
+    return res.status(401).send({
+        success: false,
+        message: "Authentication failed"
+    });
+}
 
 
 const signUpRouteController = async (req, res) => {
@@ -80,7 +125,7 @@ const signUpRouteController = async (req, res) => {
             case 'doctor':
                 userProfile = new DoctorProfile({ userId: userId, fullName: name });
                 break;
-            default :
+            default:
                 console.log("No Role Match")
         }
 
@@ -129,7 +174,7 @@ const loginRouteController = async (req, res) => {
         // Generate JWT token
         const userId = user._id;
         const key = role === 'user' ? SECRECT_USER_KEY : role === 'admin' ? SECRECT_ADMIN_KEY : SECRECT_DOCTOR_KEY;
-        const token = await generateToken({ username, password, role , userId}, key);
+        const token = await generateToken({ username, password, role, userId }, key);
 
         // Respond with token and route
         const route = `/${role}`;
@@ -140,5 +185,5 @@ const loginRouteController = async (req, res) => {
     }
 };
 
-export { signUpRouteController, loginRouteController };
+export { signUpRouteController, loginRouteController, authenticateController };
 

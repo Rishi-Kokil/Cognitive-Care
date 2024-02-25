@@ -51,11 +51,11 @@ function ManageUserPatient() {
           Patient List
         </Typography>
         <div>
-          <Typography variant="h4" className="text-right" color="blue-gray">
+          <Typography variant="h5" className="text-right" color="blue-gray">
             No of Patients Created
           </Typography>
-          <Typography className="text-right" color="blue-gray font-normal">
-            No of Patients Created
+          <Typography variant="h6" className="text-right" color="blue-gray font-normal">
+            {patientList == null ? 0 : patientList.length}
           </Typography>
         </div>
         <hr class="my-4 border-t border-gray-400" />

@@ -82,7 +82,7 @@ function CreateUserPatient() {
 
   return (
     <>
-      <Card className="h-[calc(100vh-2rem)] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto">
+      <Card className="h-[calc(100vh-2rem)] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto h-full ">
         <Typography variant="h4" className="text-center" color="blue-gray">
           Create Patient
         </Typography>

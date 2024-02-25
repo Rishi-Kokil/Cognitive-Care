@@ -10,7 +10,7 @@ import {
   Card,
   Collapse
 } from "@material-tailwind/react";
-import navlinks from '../constants';
+import navlinks from '../constants/navlinks';
 
 function NavbarComponent() {
   const [openNav, setOpenNav] = React.useState(false);

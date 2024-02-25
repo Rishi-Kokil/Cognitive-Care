@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
     Card,
     Input,
-    Checkbox,
     Button,
     Typography,
     Select,
@@ -20,7 +19,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [errorState, setErrorState] = useState(null);
 
-    const { isAuthenticated, token, login, logout } = useAuth();
+    const {login} = useAuth();
 
     const handleFormSubmit = async (e) => {
         console.log("inside submit");
@@ -35,7 +34,8 @@ function Login() {
 
                 const dashboardRoute = response.data.route;
                 const token = response.data.token;
-                login(token);
+                // console.log(token + " " + role);
+                login(token , role);
 
                 navigate(dashboardRoute);
 

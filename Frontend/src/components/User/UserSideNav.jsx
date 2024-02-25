@@ -27,7 +27,7 @@ function UserSideNav() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Card className="shadow-xl shadow-blue-gray-900/5">
+    <Card className="shadow-xl shadow-blue-gray-900/5 h-full border border-solid border-gray-600 ">
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray" >
           Cognitive Care
@@ -88,12 +88,12 @@ function UserSideNav() {
         {/* Here there is a Chip that can be used to mark the unread chats */}
         <ListItem selected={selected === 3} onClick={() => {
           setSelected(3);
-          navigate("chat")
+          navigate("forum")
         }}>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Chat
+          Forums
           <ListItemSuffix>
             <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
           </ListItemSuffix>

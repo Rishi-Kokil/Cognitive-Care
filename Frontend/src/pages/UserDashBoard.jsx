@@ -2,32 +2,52 @@ import React, { useEffect } from 'react'
 import { UserSideNav } from '../components/User';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
+import axios from 'axios';
 
 function UserDashBoard() {
 
-  const { isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token, role , logout } = useAuth();
   const navigate = useNavigate();
+  const Backend_URL = "http://localhost:8080"
 
   useEffect(() => {
-    console.log(token)
-    console.log('inside user route useeffect')
-    if (!isAuthenticated) {
-      console.log("UnAuthorised Access");
-      navigate('/login');
-    }
+    console.log(JSON.stringify({ isAuthenticated, token, role , logout }));
+    const sendData = async () => {
+      try {
+        const response = await axios.post(`${Backend_URL}/authenticate`, {
+          role: role,
+          token: token, 
+        });
+        console.log(response.data);
+
+        if(response.data.success === true){
+          navigate("home");
+        }
+
+        else{
+          navigate("/login");
+          logout();
+        }
+        
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    sendData();
+
   }, [isAuthenticated, token, navigate]);
 
   return (
     <>
 
-      <div className="grid grid-cols-10 h-screen gap-2 bg-gray-200 px-2 py-1">
+      <div className="grid grid-cols-10 h-screen gap-2 bg-gray-400   px-2 py-1">
         {/* UserSideNav occupies 2/10 of the viewport width */}
         <div className="col-span-2 ">
           <UserSideNav />
         </div>
 
-
-        <div className="col-span-8">
+        <div className="col-span-8 bg-white p-4 rounded-xl border border-black">
           <Outlet />
         </div>
       </div>
