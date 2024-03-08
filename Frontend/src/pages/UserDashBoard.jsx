@@ -18,6 +18,7 @@ function UserDashBoard() {
           role: role,
           token: token, 
         });
+
         console.log(response.data);
 
         if(response.data.success === true){
@@ -25,8 +26,8 @@ function UserDashBoard() {
         }
 
         else{
+          // logout();
           navigate("/login");
-          logout();
         }
         
       } catch (error) {
@@ -41,7 +42,7 @@ function UserDashBoard() {
   return (
     <>
 
-      <div className="grid grid-cols-10 h-screen gap-2 bg-gray-400   px-2 py-1">
+      <div className="grid grid-cols-10 h-screen gap-2 bg-blue-gray-100 px-2 py-1">
         {/* UserSideNav occupies 2/10 of the viewport width */}
         <div className="col-span-2 ">
           <UserSideNav />

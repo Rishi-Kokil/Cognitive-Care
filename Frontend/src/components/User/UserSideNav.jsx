@@ -14,21 +14,24 @@ import {
   PowerIcon,
   HeartIcon,
   PlusCircleIcon,
-  CogIcon
+  CogIcon,
+  AcademicCapIcon
 } from "@heroicons/react/24/solid";
 
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/authContext";
 
 function UserSideNav() {
   const [selected, setSelected] = useState(1);
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
+  const {logout } = useAuth();
 
   return (
     <Card className="shadow-xl shadow-blue-gray-900/5 h-full border border-solid border-gray-600 ">
-      <div className="mb-2 p-4">
+      <div className="mb-2 p-4 text-center">
         <Typography variant="h5" color="blue-gray" >
           Cognitive Care
         </Typography>
@@ -62,7 +65,9 @@ function UserSideNav() {
             className="px-3"
           >
             <ListItem
+              selected={selected === 2}
               onClick={() => {
+                setSelected(2);
                 navigate("create-patient");
               }}
             >
@@ -72,7 +77,9 @@ function UserSideNav() {
               Create Patient
             </ListItem>
             <ListItem
+              selected={selected === 3}
               onClick={() => {
+                setSelected(3);
                 // Handle manage patient action
                 navigate("manage-patient");
               }}
@@ -86,8 +93,19 @@ function UserSideNav() {
         )}
 
         {/* Here there is a Chip that can be used to mark the unread chats */}
-        <ListItem selected={selected === 3} onClick={() => {
-          setSelected(3);
+        <ListItem selected={selected === 4} onClick={() => {
+          setSelected(4);
+          navigate("mmse")
+        }}>
+          <ListItemPrefix>
+            <AcademicCapIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          MMSE Test
+        </ListItem>
+
+        {/* Here there is a Chip that can be used to mark the unread chats */}
+        <ListItem selected={selected === 5} onClick={() => {
+          setSelected(5);
           navigate("forum")
         }}>
           <ListItemPrefix>
@@ -103,8 +121,8 @@ function UserSideNav() {
         <hr class="my-4 border-t border-gray-400" />
 
 
-        <ListItem selected={selected === 4} onClick={() => {
-          setSelected(4)
+        <ListItem selected={selected === 6} onClick={() => {
+          setSelected(6)
           navigate('profile')
         }}>
           <ListItemPrefix>
@@ -112,8 +130,8 @@ function UserSideNav() {
           </ListItemPrefix>
           Profile
         </ListItem>
-        <ListItem selected={selected === 5} onClick={() => {
-          setSelected(5)
+        <ListItem selected={selected === 7} onClick={() => {
+          setSelected(7)
           navigate('settings')
         }}>
           <ListItemPrefix>
@@ -122,6 +140,7 @@ function UserSideNav() {
           Settings
         </ListItem>
         <ListItem onClick={() => {
+          logout();
           navigate("/");
         }}>
           <ListItemPrefix>

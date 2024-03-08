@@ -3,7 +3,7 @@ import multer from "multer";
 import { authenticateUser } from '../authService.js';
 import formidableMiddleware from "express-formidable"
 import formidable from "express-formidable";
-import { createUserPatientController, managePatientsController, getPatientInfoController } from './middlewares/userMiddleware.js';
+import { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController } from './middlewares/userMiddleware.js';
 import cors from 'cors';
 
 
@@ -23,5 +23,8 @@ userRouter.get("/", (req, res) => {
 userRouter.post("/create-patients", formidable() , createUserPatientController);
 userRouter.get("/manage-patients" , managePatientsController);
 userRouter.get("/get-patient-info" , getPatientInfoController);
+userRouter.get("/mri-image/:pid" , mriImageController);
+userRouter.post("/test-patient/:pid" , testPatientController);
+
 
 export default userRouter;

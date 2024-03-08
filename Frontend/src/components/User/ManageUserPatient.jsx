@@ -22,8 +22,6 @@ function ManageUserPatient() {
 
   useEffect(() => {
     const getPatientList = async () => {
-      console.log("Inside manage patient");
-      console.log(token);
       const axiosConfig = {
         headers: {
           'authorization': `Bearer ${token}`
@@ -33,8 +31,6 @@ function ManageUserPatient() {
       try {
         const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
         setPatientList(response.data.patients);
-        console.log(response.data.patients);
-        console.log(response.data);
       }
       catch (error) {
         console.log(error)

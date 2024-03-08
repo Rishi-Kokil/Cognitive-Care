@@ -1,6 +1,8 @@
 import { error, log } from "console";
 import { UserPatient, User, UserProfile } from "../../../Database/MonogoDBModels/User/index.js";
 import fs from 'fs';
+import axios from 'axios';
+import FormData from 'form-data';
 
 const createUserPatientController = async (req, res) => {
     try {
@@ -30,16 +32,14 @@ const createUserPatientController = async (req, res) => {
         //updating profile
         user_profile.patients.push(newpatient._id);
         await user_profile.save();
-
+        
         if (image) {
             const imageBuffer = fs.readFileSync(image.path);
-            const base64Image = imageBuffer.toString('base64');
             const imageContentType = image.type;
             newpatient.mri_image = {
-                data: base64Image,
+                data: imageBuffer,
                 contentType: imageContentType
             };
-
         }
 
         await newpatient.save();
@@ -72,7 +72,7 @@ const managePatientsController = async (req, res) => {
         res.status(200).json({
             success: true,
             counTotal: patientList.length,
-            message: "ALL Patient ",
+            message: "ALL Patient",
             patients,
         });
 
@@ -109,7 +109,72 @@ const getPatientInfoController = async (req, res) => {
 }
 
 
-export { createUserPatientController, managePatientsController, getPatientInfoController };
+const mriImageController = async (req, res) => {
+    console.log("Reached MRI Route");
+    try {
+        const patient_id = await UserPatient.findById(req.params.pid).select("mri_image");
+        if (patient_id.mri_image.data) {
+            res.set("Content-type", patient_id.mri_image.contentType);
+            console.log("Image Sent Back successfully");
+            return res.status(200).send(patient_id.mri_image.data);
+        }
+    }
+    catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+const testPatientController = async (req, res) => {
+    console.log("Reached Test");
+    const { username, password, userId, role } = req.user;
+    try {
+        // Retrieve the MRI image data from MongoDB
+        const patient_id = await UserPatient.findById(req.params.pid).select("mri_image");
+
+        if (patient_id && patient_id.mri_image && patient_id.mri_image.data) {
+
+            const binaryData = patient_id.mri_image.data;
+            const imageContentType = patient_id.mri_image.contentType;
+
+            // Create a FormData object and append the image file
+            const formData = new FormData();
+            formData.append('image', binaryData, { filename: 'image.jpg' });
+
+            // Send the FormData to the Flask server
+            const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
+                headers: {
+                    ...formData.getHeaders(),
+                },
+            });
+
+            // Send the output from the AI model to the frontend through the backend
+            res.send({
+                success: true,
+                result: response.data.result,
+                accuracy: response.data.accuracy
+            });
+        } else {
+            // MRI image data not found
+            res.send({
+                success: false,
+                message: 'MRI image data not found for the specified patient ID'
+            });
+        }
+    } catch (error) {
+        // console.error(error);
+        res.send({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+
+
+export { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController };
 
 
 

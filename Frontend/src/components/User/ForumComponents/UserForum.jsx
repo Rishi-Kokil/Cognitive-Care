@@ -1,6 +1,6 @@
 import React from 'react'
-import ForumHeader from './FormComponents/ForumHeader'
-import ForumBody from './FormComponents/ForumBody'
+import ForumHeader from './ForumHeader'
+import ForumBody from './ForumBody'
 
 function UserForum() {
   return (

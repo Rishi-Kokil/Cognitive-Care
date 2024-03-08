@@ -36,7 +36,7 @@ const authenticateController = async (req, res) => {
                 secretKey = SECRECT_DOCTOR_KEY;
                 break;
             default:
-                return res.status(400).send({
+                return res.send({
                     success: false,
                     message: "Invalid role specified"
                 });
@@ -51,14 +51,13 @@ const authenticateController = async (req, res) => {
             });
         }
     } catch (error) {
-        return res.status(500).send({
+        return res.send({
             success: false,
             message: error.message
         });
     }
 
-    // If decoded is not truthy, authentication failed
-    return res.status(401).send({
+    return res.send({
         success: false,
         message: "Authentication failed"
     });

@@ -4,7 +4,8 @@ import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 
 import ContextWrapper from './context/ContextWrapper';
 import { Home, Login, Signup, UserDashBoard } from './pages';
-import {UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo} from './components/User'
+import {UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo, MMSE, MMSEPatientList, MMSETest} from './components/User'
+import PageNotFound from './pages/PageNotFound';
 
 const router = createBrowserRouter([
   {
@@ -49,11 +50,30 @@ const router = createBrowserRouter([
         element: <UserSettings />
       },
       {
+        path: "mmse", // Settings route under user
+        element: <MMSE />,
+        children : [
+          {
+            path: "patient-list",    
+            element: <MMSEPatientList />
+          },
+          {
+            path: "test/:id",    
+            element: <MMSETest />
+          },
+        ]
+      },
+      {
         path: "forum",     // Chat route under user
         element: <UserForum />
-      } 
+      },
     ]
+  },
+  {
+    path : "*",
+    element:<PageNotFound />
   }
+
 ]);
 
 

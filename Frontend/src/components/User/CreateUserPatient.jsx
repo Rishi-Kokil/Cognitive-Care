@@ -11,7 +11,8 @@ function CreateUserPatient() {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [fileName, setFileName] = useState("Choose File");
+  
   const { isAuthenticated, token, login, logout } = useAuth();
 
   const resetFields = () => {
@@ -21,12 +22,14 @@ function CreateUserPatient() {
     setHeight('');
     setWeight('');
     setSelectedFile('');
+    setFileName("Choose File");
   }
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     console.log(file.name);
-    setSelectedFile(file.name);
+    setFileName(file.name);
+    setSelectedFile(file);
   };
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -72,7 +75,7 @@ function CreateUserPatient() {
       if (response.data.success === true) {
         resetFields();
       }
-      
+
     }
     catch (error) {
       console.log(error);
@@ -111,7 +114,7 @@ function CreateUserPatient() {
                 size="large"
                 onChange={handleGenderChange}
               >
-                <Option value={null} defaultChecked> --Select-- </Option>
+                <Option value={0} defaultChecked> --Select-- </Option>
                 <Option value="male">Male</Option>
                 <Option value="female">Female</Option>
                 <Option value="other">Other</Option>
@@ -141,11 +144,7 @@ function CreateUserPatient() {
               </Typography>
               <label htmlFor="file-upload" className="block mt-2">
                 <div className="relative bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 flex justify-center items-center">
-                  {selectedFile ? (
-                    <span className="text-blue-gray-600">{selectedFile}</span>
-                  ) : (
-                    <span className="text-blue-gray-600">Choose file...</span>
-                  )}
+                  {fileName}
                   <input
                     id="file-upload"
                     type="file"
