@@ -128,6 +128,7 @@ const mriImageController = async (req, res) => {
 }
 
 const testPatientController = async (req, res) => {
+    console.log(req.headers);
     console.log("Reached Test");
     const { username, password, userId, role } = req.user;
     try {

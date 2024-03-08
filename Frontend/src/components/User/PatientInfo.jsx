@@ -10,30 +10,25 @@ function PatientInfo() {
   const { token } = useAuth();
   const [imgData, setImgData] = useState(null);
 
-  const arrayBufferToBase64 = (buffer) => {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    for (let i = 0; i < bytes.length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  }
-  const handleTestPatient = async () => {
-    const axiosConfig = {
-      headers: {
-        'Authorization': `Bearer ${token}` // Corrected typo in 'Authorization'
-      }
-    };
 
+  const handleTestPatient = async () => {
     try {
-      console.log(id);
+      const axiosConfig = {
+        headers: {
+          'authorization': `Bearer ${token}`
+        }
+      };
+
+      console.log(`Bearer ${token}`);
+      // const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
       const response = await axios.post(`http://localhost:8080/user/test-patient/${id}`, axiosConfig);
-      console.log(response.data)
+      console.log(response);
     }
+
     catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-  } 
+  }
 
 
   useEffect(() => {
@@ -47,7 +42,9 @@ function PatientInfo() {
       try {
         const response = await axios.get(`http://localhost:8080/user/get-patient-info?patient_id=${id}`, axiosConfig);
         setPatient(response.data.patient);
+
         console.log(response.data.patient.mri_image);
+
         if (response.data.patient && response.data.patient.mri_image && response.data.patient.mri_image.data) {
           const imageUrl = `http://localhost:8080/user/mri-image/${patient._id}`;
           const headers = {
