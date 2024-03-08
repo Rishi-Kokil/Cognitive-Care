@@ -9,7 +9,9 @@ import MMSE from "./MMSE Components/MMSE";
 import MMSEPatientList from "./MMSE Components/MMSEPatientList";
 import MMSETest from "./MMSE Components/MMSETest";
 import UserForum from "./ForumComponents/UserForum";
+import EbbAndFlowPage from './../../pages/games/EbbAndFlowPage';
 
 
 
-export { UserSideNav , UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo, MMSE , MMSEPatientList, MMSETest};
+
+export { UserSideNav , UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo, MMSE , MMSEPatientList, MMSETest, EbbAndFlowPage};

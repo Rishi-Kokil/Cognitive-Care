@@ -1,11 +1,23 @@
-import { useState } from 'react'
+import { useState } from "react";
 import * as React from "react";
-import { createBrowserRouter, RouterProvider, } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import ContextWrapper from './context/ContextWrapper';
-import { Home, Login, Signup, UserDashBoard } from './pages';
-import {UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo, MMSE, MMSEPatientList, MMSETest} from './components/User'
-import PageNotFound from './pages/PageNotFound';
+import ContextWrapper from "./context/ContextWrapper";
+import { Home, Login, Signup, UserDashBoard } from "./pages";
+import {
+  UserHome,
+  UserProfile,
+  UserForum,
+  UserSettings,
+  CreateUserPatient,
+  ManageUserPatient,
+  PatientInfo,
+  MMSE,
+  MMSEPatientList,
+  MMSETest,
+} from "./components/User";
+import PageNotFound from "./pages/PageNotFound";
+import EbbAndFlowPage from "./pages/games/EbbAndFlowPage";
 
 const router = createBrowserRouter([
   {
@@ -14,68 +26,69 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <Signup />
+    element: <Signup />,
   },
   {
     path: "/login",
-    element: <Login />
+    element: <Login />,
   },
   {
     path: "/user",
     element: <UserDashBoard />,
     children: [
       {
-        path: "home",    // Home route under user
-        element: <UserHome />
+        path: "home", // Home route under user
+        element: <UserHome />,
       },
       {
-        path: "create-patient",    // Home route under user
-        element: <CreateUserPatient />
+        path: "create-patient", // Home route under user
+        element: <CreateUserPatient />,
       },
       {
-        path: "manage-patient",    // Home route under user
-        element: <ManageUserPatient />
+        path: "manage-patient", // Home route under user
+        element: <ManageUserPatient />,
       },
       {
-        path : "patient-info/:id",
-        element : <PatientInfo />
-
+        path: "patient-info/:id",
+        element: <PatientInfo />,
       },
       {
         path: "profile", // Profile route under user
-        element: <UserProfile />
+        element: <UserProfile />,
       },
       {
         path: "settings", // Settings route under user
-        element: <UserSettings />
+        element: <UserSettings />,
       },
       {
         path: "mmse", // Settings route under user
         element: <MMSE />,
-        children : [
+        children: [
           {
-            path: "patient-list",    
-            element: <MMSEPatientList />
+            path: "patient-list",
+            element: <MMSEPatientList />,
           },
           {
-            path: "test/:id",    
-            element: <MMSETest />
+            path: "test/:id",
+            element: <MMSETest />,
           },
-        ]
+        ],
       },
       {
-        path: "forum",     // Chat route under user
-        element: <UserForum />
+        path: "game", // Profile route under user
+        element: <EbbAndFlowPage />,
       },
-    ]
+      {
+        path: "forum", // Chat route under user
+        element: <UserForum />,
+      },
+    ],
   },
   {
-    path : "*",
-    element:<PageNotFound />
-  }
-
+    path: "*",
+    element: <PageNotFound />,
+  },
 ]);
-
 
 function App() {
   return (
@@ -84,7 +97,7 @@ function App() {
         <RouterProvider router={router} />
       </ContextWrapper>
     </>
-  )
+  );
 }
 
 export default App;

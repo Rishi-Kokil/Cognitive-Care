@@ -11,25 +11,6 @@ function PatientInfo() {
   const [imgData, setImgData] = useState(null);
 
 
-  const handleTestPatient = async () => {
-    try {
-      const axiosConfig = {
-        headers: {
-          'authorization': `Bearer ${token}`
-        }
-      };
-
-      console.log(`Bearer ${token}`);
-      // const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
-      const response = await axios.post(`http://localhost:8080/user/test-patient/${id}`, axiosConfig);
-      console.log(response);
-    }
-
-    catch (error) {
-      console.log(error.message);
-    }
-  }
-
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -71,6 +52,25 @@ function PatientInfo() {
 
     fetchPatient();
   }, []); // Include id and token as dependencies
+
+  const handleTestPatient = async () => {
+    try {
+      const axiosConfig = {
+        headers: {
+          'authorization': `Bearer ${token}`
+        }
+      };
+
+      console.log(`Bearer ${token}`);
+      // const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
+      const response = await axios.post(`http://localhost:8080/user/test-patient/${id}`, axiosConfig);
+      console.log(response);
+    }
+
+    catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <>
