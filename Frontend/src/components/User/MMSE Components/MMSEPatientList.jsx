@@ -13,17 +13,17 @@ function MMSEPatientList() {
 
     const handleItemClick = (id) => {
         console.log(id);
-         // Split the pathname into segments
-         const pathSegments = location.pathname.split('/');
+        // Split the pathname into segments
+        const pathSegments = location.pathname.split('/');
 
-         // Remove the last segment
-         pathSegments.pop();
- 
-         // Append '/test/:id' to the remaining path segments
-         const newPath = `${pathSegments.join('/')}/test/${id}`;
- 
-         // Navigate to the new path
-         navigate(newPath);
+        // Remove the last segment
+        pathSegments.pop();
+
+        // Append '/test/:id' to the remaining path segments
+        const newPath = `${pathSegments.join('/')}/test/${id}`;
+
+        // Navigate to the new path
+        navigate(newPath);
     }
 
     useEffect(() => {
@@ -36,7 +36,17 @@ function MMSEPatientList() {
 
             try {
                 const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
-                setPatientList(response.data.patients);
+                let temp = response.data.patients;
+                temp.sort((a, b) => {
+                    if (a.created_at > b.created_at) {
+                        return -1;
+                    }
+                    if (a.created_at < b.created_at) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                setPatientList(temp);
                 console.log(response.data.patients);
                 console.log(response.data);
             }
