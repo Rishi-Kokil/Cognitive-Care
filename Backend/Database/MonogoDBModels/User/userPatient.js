@@ -2,6 +2,15 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+const MMSESchema = new Schema({
+    OrientationSectionMarks : Number,
+    RegistrationSectionMarks : Number,
+    VisuospatialSectionMarks : Number,
+    LanguageSectionMarks : Number,
+    RecallSectionMarks : Number,
+    TimeStamp: { type: Date, default: Date.now },
+})
+
 const DetectionResultSchema = new Schema({
     parameter_1 : String,
     accuracy : String,
@@ -10,12 +19,6 @@ const DetectionResultSchema = new Schema({
     true_negative : String,
     output : String,
 });
-
-// Define schema for genetic biomarkers
-// const geneticBiomarkerSchema = new Schema({
-//     blood_sugar : String,
-//     blood_pressure : String,
-// });
 
 // Define schema for the patient
 const UserPatientRecordSchema = new Schema({
@@ -53,6 +56,7 @@ const UserPatientRecordSchema = new Schema({
     },
     // geneticBiomarkers: geneticBiomarkerSchema, // Nesting genetic biomarkers schema
     detectionResults: [DetectionResultSchema], // array of detection results
+    MMSETestResults : [MMSESchema],
 
 });
 

@@ -1,5 +1,5 @@
 import { error, log } from "console";
-import { UserPatient, User, UserProfile } from "../../../Database/MonogoDBModels/User/index.js";
+import { UserPatient, User, UserProfile, UserStats } from "../../../Database/MonogoDBModels/User/index.js";
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
@@ -32,7 +32,7 @@ const createUserPatientController = async (req, res) => {
         //updating profile
         user_profile.patients.push(newpatient._id);
         await user_profile.save();
-        
+
         if (image) {
             const imageBuffer = fs.readFileSync(image.path);
             const imageContentType = image.type;
@@ -128,8 +128,6 @@ const mriImageController = async (req, res) => {
 }
 
 const testPatientController = async (req, res) => {
-    console.log(req.headers);
-    console.log("Reached Test");
     const { username, password, userId, role } = req.user;
     try {
         // Retrieve the MRI image data from MongoDB
@@ -174,8 +172,25 @@ const testPatientController = async (req, res) => {
 }
 
 
+const userHomeRouteConstroller = async (req, res) => {
+    const { username, password, userId, role } = req.user;
+    try {
+        const userStats = await UserStats.findOne({ userId: userId });
+        res.json({
+            success : true,
+            message : "Stats Found Successfully",
+            userStats : userStats
+        });
+    } catch (error) {
+        res.json({
+            success : false,
+            message : error.message
+        })
+    }
+}
 
-export { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController };
+
+export { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController, userHomeRouteConstroller };
 
 
 

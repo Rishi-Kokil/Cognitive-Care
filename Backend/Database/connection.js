@@ -12,7 +12,7 @@ const envPath = path.resolve(parentParentParentDir, '.env');
 dotenv.config({ path: envPath });
 const { MONGODB_URI } = process.env;
 
-console.log(MONGODB_URI);
+console.log(MONGODB_URI); 
 
 mongoose.connect(MONGODB_URI);
 const db = mongoose.connection;

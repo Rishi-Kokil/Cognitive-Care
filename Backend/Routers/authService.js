@@ -20,7 +20,6 @@ const authenticateUser = async (req, res, next) => {
         try {
             const token = header.split(" ")[1];
             const data = await authenticateJWT(token, SECRECT_USER_KEY);
-            console.log(data);
             req.user = data;
             next();
         } catch (error) {

@@ -27,7 +27,7 @@ function ManageUserPatient() {
           'authorization': `Bearer ${token}`
         }
       };
-      //get data grom the get route
+
       try {
         const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
         setPatientList(response.data.patients);
@@ -42,8 +42,8 @@ function ManageUserPatient() {
 
   return (
     <>
-      <Card className="h-[calc(100vh-2rem)] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto">
-        <Typography variant="h4" className="text-center" color="blue-gray">
+      <Card className="h-[98vh] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto scroll-auto">
+        <Typography variant="h3" className="text-center" color="blue-gray">
           Patient List
         </Typography>
         <div>

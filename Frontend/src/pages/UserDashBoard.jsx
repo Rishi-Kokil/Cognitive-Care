@@ -48,7 +48,7 @@ function UserDashBoard() {
           <UserSideNav />
         </div>
 
-        <div className="col-span-8 bg-white p-4 rounded-xl border border-black">
+        <div className="col-span-8 bg-white rounded-xl border border-black">
           <Outlet />
         </div>
       </div>

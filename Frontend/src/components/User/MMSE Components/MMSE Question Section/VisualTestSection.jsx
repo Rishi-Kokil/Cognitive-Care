@@ -45,7 +45,9 @@ function VisualTestSection() {
                 </ul>
 
                 <Button
-                    onClick={() => { setSection(!section) }}
+                    onClick={
+                        ()=>{}
+                    }
                 >
                     Start Test
                 </Button>

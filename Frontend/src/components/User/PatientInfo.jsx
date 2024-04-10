@@ -1,107 +1,122 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Button } from '@material-tailwind/react';
+import { Typography, Button, Tooltip } from '@material-tailwind/react'; // Import Tooltip from Material Tailwind
 import axios from 'axios';
 import { useAuth } from '../../context/authContext';
+import defaultAvatar from '/assets/DefaultAvatar.png';
+import formatDateTime from '../../services/formatDate';
 
 function PatientInfo() {
   const { id } = useParams();
   const [patient, setPatient] = useState(null);
   const { token } = useAuth();
   const [imgData, setImgData] = useState(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+  };
 
+  const axiosConfig = {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  };
 
   useEffect(() => {
     const fetchPatient = async () => {
-      const axiosConfig = {
-        headers: {
-          'Authorization': `Bearer ${token}` // Corrected typo in 'Authorization'
-        }
-      };
-
       try {
         const response = await axios.get(`http://localhost:8080/user/get-patient-info?patient_id=${id}`, axiosConfig);
-        setPatient(response.data.patient);
+        const patientData = response.data.patient;
+        console.log(patientData);
+        setPatient(patientData);
 
-        console.log(response.data.patient.mri_image);
-
-        if (response.data.patient && response.data.patient.mri_image && response.data.patient.mri_image.data) {
-          const imageUrl = `http://localhost:8080/user/mri-image/${patient._id}`;
+        if (patientData && patientData.mri_image && patientData.mri_image.data) {
+          const imageUrl = `http://localhost:8080/user/mri-image/${response.data.patient._id}`;
           const headers = {
-            'Authorization': 'Bearer ' + token
+            'Authorization': `Bearer ${token}`
           };
 
-          axios.get(imageUrl, { headers: headers, responseType: 'blob' })
-            .then(response => {
-              // Create object URL from blob
-              const url = URL.createObjectURL(response.data);
-              // Now you have the image blob, you can use it to set the src attribute of an img tag
-              const img = document.createElement('img');
-              setImgData(url)
-              // document.body.appendChild(img); // Append the image to the DOM
-            })
-            .catch(error => {
-              console.error('There was a problem with the fetch operation:', error);
-            });
+          const imageResponse = await axios.get(imageUrl, { headers: headers, responseType: 'blob' });
+          const imageUrlBlob = URL.createObjectURL(imageResponse.data);
+          setImgData(imageUrlBlob);
         }
       } catch (error) {
         console.log('Error fetching patient:', error);
       }
-    }
+    };
 
     fetchPatient();
-  }, []); // Include id and token as dependencies
-
-  const handleTestPatient = async () => {
-    try {
-      const axiosConfig = {
-        headers: {
-          'authorization': `Bearer ${token}`
-        }
-      };
-
-      console.log(`Bearer ${token}`);
-      // const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
-      const response = await axios.post(`http://localhost:8080/user/test-patient/${id}`, axiosConfig);
-      console.log(response);
-    }
-
-    catch (error) {
-      console.log(error.message);
-    }
-  }
+  }, [id, token]);
 
   return (
     <>
-      {/* Header: Patient Name */}
-      {patient && <Typography variant="h1" className='text-center font-normal text-black py-2'>{patient.fullName}</Typography>}
+      {patient && (
+        <section className="h-[98vh] rounded-lg px-4 py-2 overflow-y-auto flex flex-col gap-2">
+          <div className="flex items-center gap-6 p-4 bg-white rounded-lg shadow-md">
+            <img
+              src={defaultAvatar}
+              alt="Avatar"
+              className="h-28 w-28 rounded-full object-cover border-2 border-gray-200"
+            />
+            <div>
+              <p className="text-2xl font-semibold text-gray-800">{patient.fullName}</p>
+              <p className="text-sm text-gray-500">Joined {formatDateTime(patient.created_at)}</p>
+            </div>
+          </div>
 
-      {/* Patient Information */}
-      <div className='mx-3 my-1 bg-blue-gray-100 rounded-xl p-3'>
-        {/* Display patient information */}
-        {patient && (
-          <>
-            <Typography variant="h1">MRI Image</Typography>
-            <Typography variant='h6'>{patient.age}</Typography>
-            {imgData && <img className="h-[100px] w-[100px]" src={imgData} alt='MRI_Image' />}
-            <Typography variant='h6'>{patient.height}</Typography>
-            <Typography variant='h6'>{patient.gender}</Typography>
-            <Typography variant='h6'>{patient.medicalRecords.toString()}</Typography>
-            <Typography variant='h6'>{patient.created_at}</Typography>
-            <Typography variant='h6'>{patient.detectionResults.toString()}</Typography>
-            <Button
-              className="font-normal"
-              onClick={handleTestPatient}
-            >Test this Patient</Button>
-          </>
-        )}
+          <div className="flex flex-col md:flex-row gap-4 p-4 bg-white rounded-lg shadow-md">
+            <div className="relative flex justify-center items-center w-full h-[400px] md:w-[50%] bg-transparent rounded-lg object-contain cursor-pointer ">
+              {/* Use Tooltip component to display info box */}
+              <Tooltip content="Click to view in full screen" placement="top">
+                <img
+                  src={imgData}
+                  alt="MRI"
+                  className="h-full rounded-lg"
+                  onClick={toggleFullScreen}
+                />
+              </Tooltip>
+              {isFullScreen && (
+                <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex justify-center items-center">
+                  <img
+                    src={imgData}
+                    alt="Full Screen MRI"
+                    className="h-[100vh]"
+                    onClick={toggleFullScreen}
+                  />
+                </div>
+              )}
+            </div>
 
-        <br />
-        Start Designing here
-      </div>
+            <div className="mt-4 w-full md:w-[50%] max-w-lg flex flex-col gap-4">
+
+              {/* Age, Height, Gender, Joined section */}
+              <div className="bg-gray-200 rounded-lg shadow-md p-4">
+                <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                  <p>Age: {patient.age}</p>
+                  <p>Height: {patient.height} cm</p>
+                  <p>Gender: {patient.gender || 'Not specified'}</p>
+                  <p>Joined: {formatDateTime(patient.created_at)}</p>
+                </div>
+              </div>
+
+              {/* Detection Results section */}
+              <div className="bg-gray-300 rounded-lg shadow-md p-4">
+                <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                  <p>Detection Results</p>
+                  <Button color="gray">Run Detection Test</Button>
+                </div>
+              </div>
+
+            </div>
+
+
+
+          </div>
+        </section>
+      )}
     </>
-  )
+  );
 }
 
 export default PatientInfo;

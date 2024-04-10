@@ -12,7 +12,7 @@ dotenv.config({ path: envPath });
 const { SECRECT_ADMIN_KEY, SECRECT_USER_KEY, SECRECT_DOCTOR_KEY } = process.env;
 
 //mongodb models
-import { User, UserProfile } from "../Database/MonogoDBModels/User/index.js";
+import { User, UserProfile, UserStats } from "../Database/MonogoDBModels/User/index.js";
 import { Doctor, DoctorProfile } from "../Database/MonogoDBModels/Doctor/index.js";
 import { Admin, AdminProfile } from "../Database/MonogoDBModels/Admin/index.js";
 
@@ -114,9 +114,13 @@ const signUpRouteController = async (req, res) => {
 
         // Create a profile for the user based on the role
         let userProfile;
+        let userStats;
         switch (role) {
             case 'user':
-                userProfile = new UserProfile({ userId: userId, fullName: name });
+                userStats = new UserStats({userId : userId, patientCreated : 0, testsExecuted : 0, MMSEConducted : 0});
+                await userStats.save();
+                const statsID = userStats._id;
+                userProfile = new UserProfile({ userId: userId, fullName: name, stats : statsID});
                 break;
             case 'admin':
                 userProfile = new AdminProfile({ userId: userId, fullName: name });
@@ -128,6 +132,7 @@ const signUpRouteController = async (req, res) => {
                 console.log("No Role Match")
         }
 
+        
         await userProfile.save();
 
         const token = await generateToken({ username, password, userId, role }, key);
