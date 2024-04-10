@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alzheimer's Detection</title>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    /* Additional CSS for transparent image preview box */
+    #image-preview {
+      display: none;
+      background-color: rgba(0, 0, 0, 0.1);
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    #selected-image {
+      max-width: 100%;
+      max-height: 300px;
+    }
+  </style>
+</head>
+<body class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="text-center">Alzheimer's Detection</h1>
+
+      <% if (error) { %>
+        <p class="text-danger"><%= error %></p>
+      <% } %>
+
+      <% if (result) { %>
+        <div class="alert alert-success" role="alert">
+          <strong>Result:</strong> <%= result %>
+          <% if (accuracy) { %>
+            <br>
+            <strong>Accuracy:</strong> <%= (accuracy * 100).toFixed(2) %>% <!-- Display accuracy as a percentage -->
+          <% } %>
+        </div>
+      <% } %>
+
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="image">Upload MRI Image:</label>
+          <input type="file" class="form-control-file" name="image" accept="image/*" required>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+
+      <!-- Display selected image in a box -->
+      <div class="mt-4" id="image-preview">
+        <img id="selected-image" class="img-fluid rounded" alt="Selected Image">
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Bootstrap JS and Popper.js scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <!-- Add JavaScript to display selected image -->
+  <script>
+    document.querySelector('input[type="file"]').addEventListener('change', function () {
+      const fileInput = this;
+      const selectedImage = document.getElementById('selected-image');
+      const imagePreview = document.getElementById('image-preview');
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          selectedImage.src = e.target.result;
+          imagePreview.style.display = 'block';
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        selectedImage.src = '';
+        imagePreview.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
