@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Button, Tooltip } from '@material-tailwind/react'; // Import Tooltip from Material Tailwind
+import { Typography, Button, Tooltip } from '@material-tailwind/react';
 import axios from 'axios';
 import { useAuth } from '../../context/authContext';
 import defaultAvatar from '/assets/DefaultAvatar.png';
@@ -49,6 +49,24 @@ function PatientInfo() {
     fetchPatient();
   }, [id, token]);
 
+  const renderHistory = (historyItems) => {
+    return
+    {
+      historyItems &&
+        (
+          <div className="overflow-y-auto h-48">
+            {historyItems.map((item, index) => (
+              <div key={index} className="bg-gray-100 rounded-lg shadow-md p-4 mb-4">
+                <p>{item.Output || `Marks: ${item.marks}`}</p>
+                <p className="text-sm text-gray-500">Timestamp: {formatDateTime(item.timeStamp)}</p>
+              </div>
+            ))}
+          </div>
+        )
+    }
+
+  };
+
   return (
     <>
       {patient && (
@@ -65,8 +83,8 @@ function PatientInfo() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 p-4 bg-white rounded-lg shadow-md">
-            <div className="relative flex justify-center items-center w-full h-[400px] md:w-[50%] bg-transparent rounded-lg object-contain cursor-pointer ">
+          <div className="flex flex-col md:flex-row gap-4 p-4 bg-white rounded-lg shadow-md h-full">
+            <div className="relative flex justify-center items-center w-full h-[400px] md:w-[50%] bg-transparent rounded-lg object-contain cursor-pointer">
               {/* Use Tooltip component to display info box */}
               <Tooltip content="Click to view in full screen" placement="top">
                 <img
@@ -89,8 +107,6 @@ function PatientInfo() {
             </div>
 
             <div className="mt-4 w-full md:w-[50%] max-w-lg flex flex-col gap-4">
-
-              {/* Age, Height, Gender, Joined section */}
               <div className="bg-gray-200 rounded-lg shadow-md p-4">
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
                   <p>Age: {patient.age}</p>
@@ -99,19 +115,20 @@ function PatientInfo() {
                   <p>Joined: {formatDateTime(patient.created_at)}</p>
                 </div>
               </div>
-
               {/* Detection Results section */}
-              <div className="bg-gray-300 rounded-lg shadow-md p-4">
-                <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
-                  <p>Detection Results</p>
-                  <Button color="gray">Run Detection Test</Button>
-                </div>
+              <div className="bg-gray-200 rounded-lg shadow-md p-4">
+                <Typography variant="h6" color="gray">Detection Results</Typography>
+                {renderHistory(patient.detectionResults)}
+                <Button color="gray" className="mt-2">Run Detection Test</Button>
               </div>
 
+              {/* MMSE Test Scores section */}
+              <div className="bg-gray-300 rounded-lg shadow-md p-4">
+                <Typography variant="h6" color="gray">MMSE Test Scores</Typography>
+                {renderHistory(patient.MMSETestResults)}
+                <Button color="gray" className="mt-2">Take Test</Button>
+              </div>
             </div>
-
-
-
           </div>
         </section>
       )}
