@@ -6,7 +6,6 @@ import formidable from "express-formidable";
 import { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController, userHomeRouteConstroller } from './middlewares/userMiddleware.js';
 import cors from 'cors';
 
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 

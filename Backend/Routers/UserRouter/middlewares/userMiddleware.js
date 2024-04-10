@@ -131,12 +131,13 @@ const testPatientController = async (req, res) => {
     const { username, password, userId, role } = req.user;
     try {
         // Retrieve the MRI image data from MongoDB
-        const patient_id = await UserPatient.findById(req.params.pid).select("mri_image");
 
-        if (patient_id && patient_id.mri_image && patient_id.mri_image.data) {
+        const patient_image = await UserPatient.findById(req.params.pid).select("mri_image");
 
-            const binaryData = patient_id.mri_image.data;
-            const imageContentType = patient_id.mri_image.contentType;
+        if (patient_image && patient_image.mri_image && patient_image.mri_image.data) {
+
+            const binaryData = patient_image.mri_image.data;
+            const imageContentType = patient_image.mri_image.contentType;
 
             // Create a FormData object and append the image file
             const formData = new FormData();
@@ -148,6 +149,21 @@ const testPatientController = async (req, res) => {
                     ...formData.getHeaders(),
                 },
             });
+
+            const updatedPatient = await UserPatient.findByIdAndUpdate(
+                req.params.pid,
+                {
+                    $push: {
+                        detectionResults: {
+                            result: response.data.result,
+                            accuracy: response.data.accuracy,
+                        },
+                    },
+                },
+                { new: true }
+            );
+
+
 
             // Send the output from the AI model to the frontend through the backend
             res.send({
@@ -177,14 +193,14 @@ const userHomeRouteConstroller = async (req, res) => {
     try {
         const userStats = await UserStats.findOne({ userId: userId });
         res.json({
-            success : true,
-            message : "Stats Found Successfully",
-            userStats : userStats
+            success: true,
+            message: "Stats Found Successfully",
+            userStats: userStats
         });
     } catch (error) {
         res.json({
-            success : false,
-            message : error.message
+            success: false,
+            message: error.message
         })
     }
 }

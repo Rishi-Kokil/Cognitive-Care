@@ -12,12 +12,9 @@ const MMSESchema = new Schema({
 })
 
 const DetectionResultSchema = new Schema({
-    parameter_1 : String,
+    result : String,
     accuracy : String,
-    recall : String,
-    true_positive : String,
-    true_negative : String,
-    output : String,
+    TimeStamp : { type: Date, default: Date.now },
 });
 
 // Define schema for the patient
