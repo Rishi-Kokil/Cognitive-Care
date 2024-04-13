@@ -4,7 +4,7 @@ const GameContainer = React.forwardRef((props, gameContainerRef) => {
   return (
     <div
       ref={gameContainerRef}
-      className={`bg-white overflow-hidden max-w-2xl w-full select-none h-[510px] ${className}`}
+      className={`bg-white overflow-hidden w-full select-none h-[98vh] ${className}`}
     >
       {children}
     </div>

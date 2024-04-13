@@ -64,7 +64,7 @@ function PatientInfo() {
     console.log(detectionResult);
     return (
       detectionResult && (
-        <div className="overflow-x-auto">
+        <div className="scroll-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
               <tr>
@@ -104,13 +104,15 @@ function PatientInfo() {
     <>
       {patient && (
         <section className="h-[98vh] rounded-lg px-4 py-2 overflow-y-auto flex flex-col gap-2">
-          <div className="flex items-center gap-6 p-4 bg-white rounded-lg shadow-md h-[20vh]">
+          <div className="flex items-center gap-6 px-6 py-4 bg-white rounded-lg shadow-md h-[20vh]">
             <img
               src={defaultAvatar}
               alt="Avatar"
               className="h-28 w-28 rounded-full object-cover border-2 border-gray-200"
             />
-            <div>
+            <div
+              className='flex justify-between items-center flex-grow'
+            >
               <p className="text-2xl font-semibold text-gray-800">{patient.fullName}</p>
               <p className="text-sm text-gray-500">Joined {formatDateTime(patient.created_at)}</p>
             </div>
@@ -159,7 +161,7 @@ function PatientInfo() {
                 </div>
               </div>
               {/* Detection Results section */}
-              <div className="bg-gray-200 rounded-lg shadow-md p-4">
+              <div className="bg-gray-200 h-full rounded-lg shadow-md p-4 overflow-hidden overflow-y-auto">
                 <Typography variant="h6" color="gray">Detection Results</Typography>
                 {renderDetection(patient.detectionResults)}
                 <Button

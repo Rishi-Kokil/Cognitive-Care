@@ -7,7 +7,7 @@ import defaultAvatar from '/assets/DefaultAvatar.png';
 function PatientListComponent({ fullName, _id, age, gender, created_at, handleItemClick }) {
   return (
     <div
-      className="bg-white rounded-lg shadow-md p-6 mb-4 cursor-pointer flex items-center transform hover:scale-105 transition duration-300 ease-in-out"
+      className="bg-gray-300 rounded-xl shadow-md p-6 mb-4 cursor-pointer flex items-center transform hover:scale-105 transition duration-300 ease-in-out"
       onClick={() => {
         handleItemClick(_id);
       }}
@@ -16,7 +16,7 @@ function PatientListComponent({ fullName, _id, age, gender, created_at, handleIt
         <img
           src={defaultAvatar}
           alt="Avatar"
-          className="h-28 w-28 rounded-full object-cover border-2 border-gray-200"
+          className="h-[100px] w-[100px] rounded-full object-contain border-2 border-gray-200"
         />
       </div>
 

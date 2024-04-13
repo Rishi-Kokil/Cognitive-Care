@@ -46,9 +46,9 @@ const GameCard = () => {
     };
 
     return (
-        <div className="bg-white h-lvh">
-            <div className="overflow-hidden text-center md:pt-20">
-                <GameContainer ref={gameContainerRef} className="relative isolate mx-auto">
+        <div className="h-[90vh]">
+            <div className="overflow-hidden text-center">
+                <GameContainer ref={gameContainerRef} className="relative isolate mx-auto ">
                     {isPlaying && (
                         <TopGameBoard isPlaying={isPlaying} time={time} numberOfCorrectAnswers={numberOfCorrectAnswers} />
                     )}

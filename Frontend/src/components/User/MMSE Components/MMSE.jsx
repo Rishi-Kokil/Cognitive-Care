@@ -11,7 +11,7 @@ function MMSE() {
     return (
         <>
             <Card
-                className='h-[calc(100vh-2rem)] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto'
+                className='h-[99vh] w-full shadow-xl shadow-blue-gray-900/5 overflow-y-auto'
             >
                 <Outlet />
             </Card>
