@@ -15,7 +15,6 @@ import { authenticateJWT } from '../Services/services.js';
 
 const authenticateUser = async (req, res, next) => {
     const header = req.headers.authorization;
-    console.log(header);
     if (header) {
         try {
             const token = header.split(" ")[1];

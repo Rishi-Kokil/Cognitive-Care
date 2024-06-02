@@ -3,7 +3,7 @@ import { useAuth } from '../../../context/authContext';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import PatientListComponent from '../patientListComponent';
+import PatientListComponent from '../PatientListComponent';
 import { Input } from '@material-tailwind/react';
 import SearchBar from '../../SearchBar';
 
@@ -57,7 +57,7 @@ function MMSEPatientList() {
         <div className='w-[80%] mx-auto'>
             <SearchBar handleSearch={handleSearchChange} search={search} setSearch={setSearch} />
             {filteredPatientList && filteredPatientList.map((item) => (
-                <PatientListComponent key={item.id} {...item} handleItemClick={handleItemClick} />
+                <PatientListComponent key={item._id} {...item} handleItemClick={handleItemClick} />
             ))}
         </div>
     );

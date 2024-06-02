@@ -28,8 +28,14 @@ const createUserPatientController = async (req, res) => {
         const user_profile = await UserProfile.findOne({ userId });
         const profile_id = user_profile._id;
 
-        const newpatient = new UserPatient({ user: profile_id, fullName: name, age, height, gender });
-        //updating profile
+        const newpatient = new UserPatient({
+            user: profile_id,
+            fullName: name,
+            age,
+            height,
+            gender,
+        });
+
         user_profile.patients.push(newpatient._id);
         await user_profile.save();
 
@@ -38,28 +44,93 @@ const createUserPatientController = async (req, res) => {
             const imageContentType = image.type;
             newpatient.mri_image = {
                 data: imageBuffer,
-                contentType: imageContentType
+                contentType: imageContentType,
             };
         }
 
         await newpatient.save();
+
+        // Update UserStats after successfully creating a new patient
+        const userStats = await UserStats.findOneAndUpdate(
+            { userId },
+            { $inc: { patientCreated: 1 } },
+            { new: true, upsert: true }
+        );
+
         res.status(201).json({
             success: true,
             message: "Patient Created Successfully",
-            newpatient
+            newpatient,
+            userStats,
         });
 
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
         res.status(500).send({
             success: false,
             error,
-            message: "Error in crearing product",
+            message: "Error in creating patient",
         });
     }
+};
 
-}
+
+const updateMRIController = async (req, res) => {
+    const { userId } = req.user;  // assuming req.user is populated by authentication middleware
+    const { image } = req.files;
+    const { pid } = req.fields;
+
+    try {
+        // Find the patient by ID
+        const patient = await UserPatient.findById(pid);
+
+        if (!patient) {
+            return res.status(404).send('Patient not found');
+        }
+
+        // Get the user's profile
+        const userProfile = await UserProfile.findOne({ userId });
+
+        if (!userProfile) {
+            return res.status(404).send('User profile not found');
+        }
+
+        const profileId = userProfile._id;
+
+        // Check if the profile ID matches the patient user field
+        if (patient.user.toString() !== profileId.toString()) {
+            console.log(profileId + " + " + patient.user);
+            console.log("Unauthorised");
+            return res.status(403).send({ error: "Unauthorized to update this patient" });
+        }
+
+        // Update the MRI image
+        if (image) {
+            const imageBuffer = fs.readFileSync(image.path);
+            const imageContentType = image.type;
+            patient.mri_image = {
+                data: imageBuffer,
+                contentType: imageContentType,
+            };
+        }
+
+        // Save the updated patient document
+        await patient.save();
+
+        // Update UserStats for MRI image updates
+        const userStats = await UserStats.findOneAndUpdate(
+            { userId },
+            { $inc: { mriImagesUpdated: 1 } }, // Assuming you have a field for tracking MRI image updates
+            { new: true, upsert: true }
+        );
+
+        res.status(200).json({ message: "MRI Image Updated Successfully" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
 
 const managePatientsController = async (req, res) => {
     const { username, password, userId, role } = req.user;
@@ -88,7 +159,6 @@ const managePatientsController = async (req, res) => {
 
 const getPatientInfoController = async (req, res) => {
     const patient_id = req.query.patient_id;
-    console.log(patient_id);
     try {
         const patient = await UserPatient.findById(patient_id);
         res.send({
@@ -110,12 +180,10 @@ const getPatientInfoController = async (req, res) => {
 
 
 const mriImageController = async (req, res) => {
-    console.log("Reached MRI Route");
     try {
         const patient_id = await UserPatient.findById(req.params.pid).select("mri_image");
         if (patient_id.mri_image.data) {
             res.set("Content-type", patient_id.mri_image.contentType);
-            console.log("Image Sent Back successfully");
             return res.status(200).send(patient_id.mri_image.data);
         }
     }
@@ -164,7 +232,6 @@ const testPatientController = async (req, res) => {
             );
 
 
-
             // Send the output from the AI model to the frontend through the backend
             res.send({
                 success: true,
@@ -205,8 +272,39 @@ const userHomeRouteConstroller = async (req, res) => {
     }
 }
 
+const handleTestDelete = async (req, res) => {
+    const pid = req.query.patient_id;
+    const tid = req.query.test_id;
 
-export { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController, userHomeRouteConstroller };
+    try {
+        // Find the patient by ID
+        const patient = await UserPatient.findById(pid);
+
+        if (!patient) {
+            return res.status(404).send('Patient not found');
+        }
+
+        // Find the detection result by ID and remove it
+        const detectionResultIndex = patient.detectionResults.findIndex(result => result._id.toString() === tid);
+
+        if (detectionResultIndex === -1) {
+            return res.status(404).send('Detection result not found');
+        }
+
+        // Remove the detection result from the array
+        patient.detectionResults.splice(detectionResultIndex, 1);
+
+        // Save the updated patient document
+        await patient.save();
+
+        res.status(200).json({ message: "Test Deleted Successfully" });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
+export { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController, userHomeRouteConstroller, handleTestDelete, updateMRIController };
 
 
 

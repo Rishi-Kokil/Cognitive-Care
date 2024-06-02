@@ -1,47 +1,52 @@
 import React from 'react';
 import { Typography } from '@material-tailwind/react';
 import formatDateTime from '../../services/formatDate';
+import { Trash2 } from 'lucide-react';
 
 import defaultAvatar from '/assets/DefaultAvatar.png';
+import { HoverBorderGradient } from '../ui/hover-border-gradient';
 
-function PatientListComponent({ fullName, _id, age, gender, created_at, handleItemClick }) {
+function PatientListComponent({ fullName, _id, age, gender, created_at, handleItemClick, handleDeleteClick }) {
   return (
-    <div
-      className="bg-gray-300 rounded-xl shadow-md p-6 mb-4 cursor-pointer flex items-center transform hover:scale-105 transition duration-300 ease-in-out"
+    <HoverBorderGradient
       onClick={() => {
-        handleItemClick(_id);
+        handleItemClick(_id); 
       }}
+      className="bg-gray-300 text-black w-full rounded-xl p-2 lg:p-6 cursor-pointer flex items-center hover:shadow-lg"
+      containerClassName="w-full mb-2 border-2"
     >
+      <button
+        className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:text-gray-900"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleDeleteClick(_id);
+        }}
+      >
+        <Trash2 className="w-5 h-5" />
+      </button>
+
       <div>
         <img
           src={defaultAvatar}
           alt="Avatar"
-          className="h-[100px] w-[100px] rounded-full object-contain border-2 border-gray-200"
+          className="h-[50px] w-[50px] rounded-full object-contain border-2 border-gray-200 md:h-[100px] md:w-[100px]"
         />
       </div>
 
-      <div className="flex-grow ml-4"> {/* Use flex-grow to occupy remaining space */}
+      <div className="flex-grow ml-4">
         <div className="flex items-center justify-between mb-2">
-          <Typography variant="h5" className="font-bold" color="blue-gray">
+          <Typography variant="h5" className="font-bold text-sm lg:text-lg" color="blue-gray">
             {fullName}
           </Typography>
-          <p className="text-gray-700 text-sm">
+          <p className="text-gray-700 text-xs hidden lg:block">
             <strong>Timestamp:</strong> {formatDateTime(created_at)}
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-x-2 text-[0.9rem]">
-          <p className="text-gray-700">
-            <strong>ID:</strong> {_id}
-          </p>
-          <p className="text-gray-700">
-            <strong>Age:</strong> {age}
-          </p>
-          <p className="text-gray-700">
-            <strong>Gender:</strong> {gender}
-          </p>
-        </div>
+        <p className="hidden sm:block text-xs md:text-base text-left">
+          <strong>ID:</strong> {_id}
+        </p>
       </div>
-    </div>
+    </HoverBorderGradient>
   );
 }
 

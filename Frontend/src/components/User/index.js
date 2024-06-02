@@ -4,12 +4,12 @@ import UserProfile from "./UserProfile";
 import UserSettings from "./UserSettings";
 import CreateUserPatient from "./CreateUserPatient"
 import ManageUserPatient from "./ManageUserPatient";
-import PatientInfo from "./PatientInfo";
 import MMSE from "./MMSE Components/MMSE";
 import MMSEPatientList from "./MMSE Components/MMSEPatientList";
 import MMSETest from "./MMSE Components/MMSETest";
 import UserForum from "./ForumComponents/UserForum";
 import EbbAndFlowPage from './../../pages/games/EbbAndFlowPage';
+import PatientInfo from "./Patient Info Component/PatientInfo";
 
 
 

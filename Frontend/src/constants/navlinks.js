@@ -1,24 +1,25 @@
+
 const navlinks = [
-    {
-        id : 1,
-        title : "Home",
-        url : "/",
-    },
-    {
-        id : 2,
-        title : "Model",
-        url : "/model",
-    },
-    {
-        id : 3,
-        title : "Community",
-        url : "/community",
-    },
-    {
-        id : 4,
-        title : "Contact",
-        url : "/contact",
-    },
-]
+  {
+    id: 1,
+    title: "Home",
+    url: "home",
+  },
+  {
+    id: 2,
+    title: "Features",
+    url: "feature",
+  },
+  {
+    id: 3,
+    title: "Model",
+    url: "model",
+  },
+  {
+    id: 4,
+    title: "About",
+    url: "/about",
+  },
+];
 
 export default navlinks;
