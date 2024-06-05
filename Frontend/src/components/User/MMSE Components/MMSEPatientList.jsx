@@ -1,41 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/authContext';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import PatientListComponent from '../PatientListComponent';
-import { Input } from '@material-tailwind/react';
+import { Button, Typography } from '@material-tailwind/react';
 import SearchBar from '../../SearchBar';
+import { useAxios } from '../../../context/axiosContext';
 
 function MMSEPatientList() {
     const { token } = useAuth();
     const [patientList, setPatientList] = useState(null);
-    const [filteredPatientList, setFilteredPatientList] = useState(null); // State to hold filtered patient list
-    const [search, setSearch] = useState("")
+    const [filteredPatientList, setFilteredPatientList] = useState(null);
+    const [search, setSearch] = useState("");
+    const [patientsFound, setPatientsFound] = useState(true); // State to track if patients are found
     const navigate = useNavigate();
     const location = useLocation();
+    const axiosInstance = useAxios(); // Get the Axios instance from context
 
     useEffect(() => {
         const fetchPatients = async () => {
-            const axiosConfig = {
-                headers: {
-                    'authorization': `Bearer ${token}`
-                }
-            };
-
             try {
-                const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
+                const response = await axiosInstance.get("user/manage-patients");
                 let temp = response.data.patients;
                 temp.sort((a, b) => (a.created_at > b.created_at) ? -1 : ((a.created_at < b.created_at) ? 1 : 0));
                 setPatientList(temp);
-                setFilteredPatientList(temp); // Initialize filtered list with all patients
+                setFilteredPatientList(temp);
+                setPatientsFound(temp.length > 0); // Set patientsFound based on fetched data
             } catch (error) {
                 console.log(error);
             }
         };
 
         fetchPatients();
-    }, [token]);
+    }, [axiosInstance]);
 
     const handleItemClick = (id) => {
         const pathSegments = location.pathname.split('/');
@@ -46,19 +42,36 @@ function MMSEPatientList() {
 
     const handleSearchChange = (event) => {
         const searchText = event.target.value.toLowerCase();
-        setSearch(searchText)
+        setSearch(searchText);
         const filteredPatients = patientList.filter(patient =>
             patient.fullName.toLowerCase().includes(searchText)
         );
         setFilteredPatientList(filteredPatients);
+        setPatientsFound(filteredPatients.length > 0); // Update patientsFound based on filtered data
     };
 
     return (
         <div className='w-[80%] mx-auto'>
             <SearchBar handleSearch={handleSearchChange} search={search} setSearch={setSearch} />
-            {filteredPatientList && filteredPatientList.map((item) => (
-                <PatientListComponent key={item._id} {...item} handleItemClick={handleItemClick} />
-            ))}
+            {
+                patientsFound ? (
+                    filteredPatientList && filteredPatientList.map((item) => (
+                        <PatientListComponent key={item._id} {...item} handleItemClick={handleItemClick} />
+                    ))
+                ) : (
+                    <div className="text-center mt-8">
+                        <Typography variant="h6" color="blue-gray">
+                            No patients found. Create patients to manage.
+                        </Typography>
+                        <Button
+                            className="mt-4 bg-gray-900"
+                            onClick={() => navigate('/user/create-patient')}
+                        >
+                            Create Patient
+                        </Button>
+                    </div>
+                )
+            }
         </div>
     );
 }

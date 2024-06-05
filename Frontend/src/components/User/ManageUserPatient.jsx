@@ -1,93 +1,92 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Card, Collapse, Button } from '@material-tailwind/react';
+import { Typography, Card, Button } from '@material-tailwind/react';
 import PatientListComponent from './PatientListComponent';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../../context/authContext';
 import SearchBar from '../SearchBar';
+import { useAxios } from '../../context/axiosContext';
 
 function ManageUserPatient() {
-    const [patientList, setPatientList] = useState([]);
-    const [filteredPatientList, setFilteredPatientList] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [patientList, setPatientList] = useState([]); // Original list of patients
+    const [filteredPatientList, setFilteredPatientList] = useState([]); // Filtered list of patients
     const navigate = useNavigate();
-    const { token } = useAuth();
+    const [pageRefresh, setPageRefresh] = useState(true);
+    const axiosInstance = useAxios(); // Use the Axios instance from context
+    const [search, setSearch] = useState("");
 
     const handleItemClick = (id) => {
         navigate(`/user/patient-info/${id}`);
     };
 
-    const toggleOpen = () => {
-        setOpen(prevOpen => !prevOpen);
-        console.log('Toggle state:', !open); // Debugging the toggle function
-    };
-
     useEffect(() => {
         const getPatientList = async () => {
-            const axiosConfig = {
-                headers: {
-                    'authorization': `Bearer ${token}`,
-                },
-            };
-
             try {
-                const response = await axios.get("http://localhost:8080/user/manage-patients", axiosConfig);
-                let temp = response.data.patients;
-                temp.sort((a, b) => (a.created_at > b.created_at) ? -1 : ((a.created_at < b.created_at) ? 1 : 0));
-                setPatientList(temp);
-                setFilteredPatientList(temp);
+                const response = await axiosInstance.get("/user/manage-patients");
+                const sortedPatients = response.data.patients.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                setPatientList(sortedPatients); // Set the original list
+                setFilteredPatientList(sortedPatients); // Set the filtered list
             } catch (error) {
                 console.log(error);
             }
         };
 
         getPatientList();
-    }, [token]);
+    }, [axiosInstance, pageRefresh]);
 
     const handleSearchChange = (event) => {
         const searchText = event.target.value.toLowerCase();
-        const filteredPatients = patientList.filter(patient =>
-            patient.fullName.toLowerCase().includes(searchText)
+        setSearch(searchText);
+        const searchRegex = new RegExp(searchText, 'i');
+        setFilteredPatientList(
+            patientList
+                .filter(patient => searchRegex.test(patient.fullName))
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         );
-        setFilteredPatientList(filteredPatients.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
     };
 
     return (
-        <>
-            <Card className="h-[98vh] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto">
-                <Typography variant="h3" className="text-center" color="blue-gray">
+        <Card className="h-[98vh] w-full p-8 shadow-xl shadow-blue-gray-900/5 overflow-y-auto">
+            <div className="p-4 bg-gray-900 text-white rounded-md mb-4">
+                <Typography variant="h3" className="text-center text-white" color="blue-gray">
                     Patient List
                 </Typography>
                 <div>
-                    <Typography variant="h5" className="text-right" color="blue-gray">
+                    <Typography variant="h5" className="text-right" color="white">
                         No of Patients Created
                     </Typography>
-                    <Typography variant="h6" className="text-right" color="blue-gray font-normal">
+                    <Typography variant="h6" className="text-right" color="white">
                         {filteredPatientList.length}
                     </Typography>
                 </div>
-                <hr className="my-4 border-t border-gray-400" />
-                <div className='flex gap-5 items-center'>
-                    <SearchBar handleSearch={handleSearchChange} />
-                    <Button onClick={toggleOpen}>Toggle Age</Button>
-                </div>
-                <Collapse open={open}>
-                    <Card
-                        className='h-[400px] w-[100px] z-20'
-                    >
-                        <Typography
+            </div>
 
-                        >
-                            Use our Tailwind CSS collapse for your website. You can use it for
-                            accordion, collapsible items, and much more.
-                        </Typography>
-                    </Card>
-                </Collapse>
-                {filteredPatientList.map((item) => (
-                    <PatientListComponent key={item._id} {...item} handleItemClick={handleItemClick} />
-                ))}
-            </Card>
-        </>
+            <hr className="my-4 border-t border-gray-400" />
+
+            <SearchBar handleSearch={handleSearchChange} search={search} />
+
+            {filteredPatientList.length > 0 ? (
+                filteredPatientList.map((item) => (
+                    <PatientListComponent
+                        key={item._id}
+                        {...item}
+                        handleItemClick={handleItemClick}
+                        pageRefresh={pageRefresh}
+                        setPageRefresh={setPageRefresh}
+                    />
+                ))
+            ) : (
+                <div className="text-center mt-8">
+                    <Typography variant="h6" color="blue-gray">
+                        No patients found. Create patients to manage.
+                    </Typography>
+                    <Button
+                        className="mt-4 bg-gray-900"
+                        onClick={() => navigate('/user/create-patient')}
+                    >
+                        Create Patient
+                    </Button>
+                </div>
+            )}
+        </Card>
     );
 }
 

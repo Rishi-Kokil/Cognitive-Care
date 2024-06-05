@@ -143,7 +143,7 @@ function PatientInfo() {
               {isFullScreen && (
                 <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex justify-center items-center">
                   <X 
-                    className='absolute top-2 right-6 w-10 h-10 text-white bg-black p-2 cursor-pointer'
+                    className='absolute top-2 right-6 w-10 h-10 text-white bg-black p-2 cursor-pointer rounded-full'
                     onClick={toggleFullScreen}
                   />
                   <img

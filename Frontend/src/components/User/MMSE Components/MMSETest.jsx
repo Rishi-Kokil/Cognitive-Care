@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Stepper, Step, Button } from "@material-tailwind/react";
-
+import { useParams } from 'react-router-dom';
 import {
     Home,
     Eye,
@@ -11,26 +11,30 @@ import Orientation from './MMSE Question Sections/Orientation';
 import MemorySection from './MMSE Question Sections/MemorySection';
 import VisualSection from './MMSE Question Sections/VisualTestSection';
 import LanguageSection from './MMSE Question Sections/LanguageSection';
+import { useMMSEContext } from '../../../context/MMSEContext';
 
 const MMSETest = () => {
-    const [activeStep, setActiveStep] = useState(0);
     const [isLastStep, setIsLastStep] = useState(false);
     const [isFirstStep, setIsFirstStep] = useState(true); // Initially set to true for the first step
+    const { id: patientId } = useParams(); // getting the id parameter and assigning it to patientId
+
+    const handleNext = () => !isLastStep && setSection(patientId, getSection(patientId) + 1);
+    const handlePrev = () => !isFirstStep && setSection(patientId, getSection(patientId) - 1);
+
+    // Update the onClick handlers to navigate to specific steps
+    const handleStepClick = (stepIndex) => {
+        setSection(patientId, stepIndex);
+        setIsFirstStep(stepIndex === 0);
+        setIsLastStep(stepIndex === 3);
+    };
 
     const [orientationMarks, setOrientationMarks] = useState(0);
     const [visualMarks, setVisualMarks] = useState(0);
     const [memoryMarks, setMemoryMarks] = useState(0);
     const [languageMarks, setLanguageMarks] = useState(0);
 
-    const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
-    const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
-
-    // Update the onClick handlers to navigate to specific steps
-    const handleStepClick = (stepIndex) => {
-        setActiveStep(stepIndex);
-        setIsFirstStep(stepIndex === 0);
-        setIsLastStep(stepIndex === 3);
-    };
+    const { getSection, setSection } = useMMSEContext();
+    const activeStep = getSection(patientId) || 0;
 
     return (
         <div className='border-2 h-[99vh] w-full rounded-lg'>
@@ -46,14 +50,14 @@ const MMSETest = () => {
                     handleNext={handleNext}
                 />}
                 {activeStep === 2 && <VisualSection
-                setVisualMarks={setVisualMarks}
-                handleNext={handleNext} />}
+                    setVisualMarks={setVisualMarks}
+                    handleNext={handleNext} />}
                 {activeStep === 3 && <LanguageSection
-                setLanguageMarks={setLanguageMarks}
-                handleNext={handleNext} 
-                handlePrev={handlePrev} />
+                    setLanguageMarks={setLanguageMarks}
+                    handleNext={handleNext}
+                    handlePrev={handlePrev} />
                 }
-                
+
 
             </div>
             <div className="w-full px-8 py-2 h-[15%] bg-transparent">

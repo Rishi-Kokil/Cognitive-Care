@@ -1,14 +1,21 @@
 
 import React, { useEffect } from 'react';
 import { AuthComponent } from './authContext';
+import { MMSEContextWrapper } from './MMSEContext';
+import { AxiosContextWrapper } from './axiosContext';
+
 
 function ContextWrapper({ children }) {
-    useEffect(()=>{
+    useEffect(() => {
         console.log("inside wrapper");
-    },[])
+    }, [])
     return (
         <AuthComponent>
-            {children}
+            <AxiosContextWrapper>
+                <MMSEContextWrapper>
+                    {children}
+                </MMSEContextWrapper>
+            </AxiosContextWrapper>
         </AuthComponent>
     );
 }

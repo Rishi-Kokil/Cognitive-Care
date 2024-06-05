@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Select, Input, Card, Button, Option, Slider } from '@material-tailwind/react';
+import { Typography, Select, Input, Card, Button, Option, Slider, Alert } from '@material-tailwind/react';
 import axios from 'axios';
 import { useAuth } from '../../context/authContext';
 
@@ -11,6 +11,9 @@ function CreateUserPatient() {
   const [weight, setWeight] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState("Choose File");
+  const [toggleAlert, setToggleAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertColor, setAlertColor] = useState("");
 
   const { isAuthenticated, token, login, logout } = useAuth();
 
@@ -50,6 +53,26 @@ function CreateUserPatient() {
     setWeight(event.target.value);
   };
 
+  const showSuccessAlert = () => {
+    setAlertMessage("Patient Added Successfully");
+    setAlertColor("green");
+    setToggleAlert(true);
+
+    setTimeout(() => {
+      setToggleAlert(false)
+    }, 2000);
+  }
+
+  const showErrorAlert = () => {
+    setAlertMessage("There was an error while adding the Patient !!! ");
+    setAlertColor("red");
+    setToggleAlert(true);
+
+    setTimeout(() => {
+      setToggleAlert(false)
+    }, 2000);
+  }
+
   const handleFormSubmit = async () => {
     const formData = new FormData();
     formData.append('name', name);
@@ -66,17 +89,17 @@ function CreateUserPatient() {
       }
     };
 
-    console.log(token);
-
     try {
       const response = await axios.post("http://localhost:8080/user/create-patients", formData, axiosConfig);
       console.log(response);
+      showSuccessAlert();
       if (response.data.success === true) {
         resetFields();
       }
 
     }
     catch (error) {
+      showErrorAlert();
       console.log(error);
     }
 
@@ -84,7 +107,7 @@ function CreateUserPatient() {
 
   return (
     <>
-      <div className="w-[90%] md:px-6 md:py-8 mx-auto rounded-md ">
+      <div className="w-full flex flex-col gap-5 rounded-md px-12 py-6">
         <Typography variant="h3" className='text-center' >
           Create Patient
         </Typography>
@@ -175,7 +198,12 @@ function CreateUserPatient() {
               Submit
             </Button>
           </div>
+
         </form>
+        <Alert
+          className={`w-[500px] mx-auto ${!toggleAlert ? "hidden" : "block"}`}
+          color='green'
+        >{alertMessage}</Alert>
       </div>
     </>
   )

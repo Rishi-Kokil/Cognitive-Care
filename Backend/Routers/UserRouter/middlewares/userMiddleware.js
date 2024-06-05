@@ -273,8 +273,8 @@ const userHomeRouteConstroller = async (req, res) => {
 }
 
 const handleTestDelete = async (req, res) => {
-    const pid = req.query.patient_id;
-    const tid = req.query.test_id;
+    const { patient_id: pid, test_id: tid } = req.query;
+    const { userId } = req.user; // assuming req.user is populated by authentication middleware
 
     try {
         // Find the patient by ID
@@ -297,14 +297,74 @@ const handleTestDelete = async (req, res) => {
         // Save the updated patient document
         await patient.save();
 
-        res.status(200).json({ message: "Test Deleted Successfully" });
+        // Update UserStats for the number of tests deleted
+        const userStats = await UserStats.findOneAndUpdate(
+            { userId },
+            { $inc: { testsDeleted: 1 } }, // Assuming you have a field for tracking deleted tests
+            { new: true, upsert: true }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Test Deleted Successfully",
+            userStats
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 };
 
+const handleDeletePatient = async (req, res) => {
+    const { patient_id } = req.query;
+    const { userId } = req.user; // assuming req.user is populated by authentication middleware
 
-export { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController, userHomeRouteConstroller, handleTestDelete, updateMRIController };
+    try {
+        // Find the patient by ID
+        const patient = await UserPatient.findById(patient_id);
+
+        if (!patient) {
+            return res.status(404).send({ message: 'Patient not found' });
+        }
+
+        const userProfile = await UserProfile.findOne({ userId });
+
+        if (!userProfile) {
+            return res.status(404).send({ message: 'User profile not found' });
+        }
+
+        const profileId = userProfile._id;
+
+        if (patient.user.toString() !== profileId.toString()) {
+            return res.status(403).send({ message: "Unauthorized to delete this patient" });
+        }
+
+        // Delete the patient
+        await UserPatient.findByIdAndDelete(patient_id);
+
+        // Remove the patient ID from the user's profile patients array
+        userProfile.patients = userProfile.patients.filter(pId => pId.toString() !== patient_id.toString());
+        await userProfile.save();
+
+        // Update UserStats after successfully deleting a patient
+        const userStats = await UserStats.findOneAndUpdate(
+            { userId },
+            { $inc: { patientDeleted: 1 } },
+            { new: true, upsert: true }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Patient Deleted Successfully",
+            userStats
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    }
+};
+
+export { createUserPatientController, managePatientsController, getPatientInfoController, mriImageController, testPatientController, userHomeRouteConstroller, handleTestDelete, updateMRIController, handleDeletePatient };
 
 
 

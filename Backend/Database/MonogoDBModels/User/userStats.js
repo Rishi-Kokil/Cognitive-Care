@@ -6,12 +6,23 @@ const userStatsSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'User', // Referencing the User model
     },
+    
     patientCreated : {
         type : Number
     },
+
+    patientDeleted : {
+        type : Number
+    },
+
     testsExecuted : {
         type : Number
     },
+
+    testsDeleted : {
+        type : Number
+    },
+
     MMSEConducted : {
         type : Number,
     }
