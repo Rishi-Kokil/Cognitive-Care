@@ -5,9 +5,11 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 function MMSE() {
     const navigate = useNavigate();
+    
     useEffect(() => {
         navigate("patient-list");
-     }, []);
+    }, []);
+
     return (
         <>
             <Card

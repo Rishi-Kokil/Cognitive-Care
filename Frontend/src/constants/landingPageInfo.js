@@ -18,6 +18,11 @@ const landingfInfo = [
         "id": "feature4",
         "title": "ML Model for Detection",
         "info": "Harnessing the power of cutting-edge Machine Learning algorithms to enhance the accuracy and speed of Alzheimer's detection, providing peace of mind with every use."
+    },
+    {
+        "id": "feature5",
+        "title": "Cognitive Games",
+        "info": "Integration of games that can help boost cognitive funtion of the Brain."
     }
 ]  
 

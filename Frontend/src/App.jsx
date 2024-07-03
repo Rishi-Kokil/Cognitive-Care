@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import { RecoilRoot } from 'recoil';
 import ContextWrapper from "./context/ContextWrapper";
 import { Home, Login, Signup, UserDashBoard } from "./pages";
 import {
@@ -15,6 +15,7 @@ import {
   MMSEPatientList,
   MMSETest,
 } from "./components/User";
+
 import PageNotFound from "./pages/PageNotFound";
 import EbbAndFlowPage from "./pages/games/EbbAndFlowPage";
 
@@ -92,9 +93,11 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <ContextWrapper>
-        <RouterProvider router={router} />
-      </ContextWrapper>
+      <RecoilRoot>
+        <ContextWrapper>
+          <RouterProvider router={router} />
+        </ContextWrapper>
+      </RecoilRoot>
     </>
   );
 }

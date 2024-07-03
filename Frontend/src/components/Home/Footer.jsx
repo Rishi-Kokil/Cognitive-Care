@@ -5,10 +5,10 @@ function Footer() {
     const currentYear = new Date().getFullYear();
     return (
         <footer >
-            <div className="flex w-full flex-col items-center justify-center border-t border-blue-gray-50 py-4 md:flex-row md:justify-between">
+            <div className="flex w-full flex-col items-center justify-center border-t border-blue-gray-100 py-4 md:flex-row md:justify-between">
                 <Typography
                     variant="small"
-                    className="mb-4 text-center font-normal text-blue-gray-900 md:mb-0"
+                    className="mb-4 text-center font-semibold text-blue-gray-900 md:mb-0"
                 >
                     &copy; {currentYear} <a href="https://material-tailwind.com/">Cognitive Care</a>. All
                     Rights Reserved.

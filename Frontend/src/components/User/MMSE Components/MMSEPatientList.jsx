@@ -12,9 +12,10 @@ function MMSEPatientList() {
     const [filteredPatientList, setFilteredPatientList] = useState(null);
     const [search, setSearch] = useState("");
     const [patientsFound, setPatientsFound] = useState(true); // State to track if patients are found
+
     const navigate = useNavigate();
     const location = useLocation();
-    const axiosInstance = useAxios(); // Get the Axios instance from context
+    const axiosInstance = useAxios(); 
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -24,7 +25,7 @@ function MMSEPatientList() {
                 temp.sort((a, b) => (a.created_at > b.created_at) ? -1 : ((a.created_at < b.created_at) ? 1 : 0));
                 setPatientList(temp);
                 setFilteredPatientList(temp);
-                setPatientsFound(temp.length > 0); // Set patientsFound based on fetched data
+                setPatientsFound(temp.length > 0);
             } catch (error) {
                 console.log(error);
             }
