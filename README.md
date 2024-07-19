@@ -1,6 +1,6 @@
 # Cognitive Care: Alzheimer's Disease Detection Platform
 
-Cognitive Care is a web-based platform designed to assist in the detection of Alzheimer's disease. It provides a user-friendly interface for doctors and caregivers to upload MRI scans and analyze them using an AI-powered detection model. The platform aims to streamline the diagnosis process and provide valuable insights to healthcare professionals.
+Cognitive Care is a web-based platform designed to assist in the detection of Alzheimer's Disease. It provides a user-friendly interface for doctors and caregivers to upload MRI scans and analyze them using an AI-powered detection model. The platform aims to streamline the diagnosis process and provide valuable insights to healthcare professionals.
 
 ## Features
 
@@ -78,6 +78,6 @@ python app.py
 ## Members
 
 - Amit Murkalmath 
-- Ilham Syed
-- Pavan Thakur
 - Rishi Kokil
+- Pavan Thakur
+- Ilham Syed
