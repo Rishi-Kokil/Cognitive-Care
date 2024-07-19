@@ -78,6 +78,6 @@ python app.py
 ## Members
 
 - Amit Murkalmath 
-- Ilham Syed
-- Pavan Thakur
 - Rishi Kokil
+- Pavan Thakur
+- Ilham Syed
