@@ -13,7 +13,7 @@ import {
   PatientInfo,
   MMSE,
   MMSEPatientList,
-  MMSETest,
+  MMSETestComponent
 } from "./components/User";
 
 import PageNotFound from "./pages/PageNotFound";
@@ -69,8 +69,8 @@ const router = createBrowserRouter([
             element: <MMSEPatientList />,
           },
           {
-            path: "test/:id",
-            element: <MMSETest />,
+            path: "test/:pid",
+            element: <MMSETestComponent />,
           },
         ],
       },

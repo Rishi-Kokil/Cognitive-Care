@@ -6,6 +6,8 @@ import { Button, Typography } from '@material-tailwind/react';
 import SearchBar from '../../SearchBar';
 import { useAxios } from '../../../context/axiosContext';
 
+
+
 function MMSEPatientList() {
     const { token } = useAuth();
     const [patientList, setPatientList] = useState(null);
@@ -15,7 +17,7 @@ function MMSEPatientList() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const axiosInstance = useAxios(); 
+    const axiosInstance = useAxios();
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -38,7 +40,9 @@ function MMSEPatientList() {
         const pathSegments = location.pathname.split('/');
         pathSegments.pop();
         const newPath = `${pathSegments.join('/')}/test/${id}`;
+        console.log(newPath);
         navigate(newPath);
+
     };
 
     const handleSearchChange = (event) => {

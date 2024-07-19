@@ -6,12 +6,12 @@ import CreateUserPatient from "./CreateUserPatient"
 import ManageUserPatient from "./ManageUserPatient";
 import MMSE from "./MMSE Components/MMSERootComponent";
 import MMSEPatientList from "./MMSE Components/MMSEPatientList";
-import MMSETest from "./MMSE Components/MMSESectionRouter";
 import UserForum from "./ForumComponents/UserForum";
 import EbbAndFlowPage from './../../pages/games/EbbAndFlowPage';
 import PatientInfo from "./Patient Info Component/PatientInfo";
+import MMSETestComponent from "./MMSE Components/MMSE_Test/MMSETestComponent";
 
 
 
 
-export { UserSideNav , UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo, MMSE , MMSEPatientList, MMSETest, EbbAndFlowPage};
+export { UserSideNav , UserHome, UserProfile, UserForum, UserSettings, CreateUserPatient, ManageUserPatient, PatientInfo, MMSE , MMSEPatientList, EbbAndFlowPage, MMSETestComponent};
